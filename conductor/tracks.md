@@ -4,5 +4,5 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [ ] **Track: Build core EncfS key cracking engine**
+- [~] **Track: Build core EncfS key cracking engine**
   *Link: [./tracks/core_engine_20260510/](./tracks/core_engine_20260510/)*

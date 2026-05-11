@@ -4,8 +4,8 @@
 - [x] Task: Project Scaffolding 3e15c84
     - [x] Initialize Cargo project.
     - [x] Add dependencies (`clap`, `serde`, `quick-xml`, `anyhow`).
-- [ ] Task: EncfS Config Parsing
-    - [ ] Define Rust structs for `.encfs6.xml` schema.
+- [~] Task: EncfS Config Parsing
+    - [~] Define Rust structs for `.encfs6.xml` schema.
     - [ ] Implement parser and unit tests with sample config files.
 - [ ] Task: Conductor - User Manual Verification 'Phase 1: Foundation & Parsing' (Protocol in workflow.md)
 
