@@ -8,9 +8,15 @@ where
     T: Clone + Send + Sync + 'static + AsRef<str>,
     F: Fn(&[T]) -> bool + Send + Sync 
 {
-    let count = AtomicUsize::new(0);
+    let skip_count = if let Some(db) = SledDb::get() {
+        db.load_checkpoint().unwrap_or(None).and_then(|s| s.parse::<usize>().ok()).unwrap_or(0)
+    } else {
+        0
+    };
+
+    let count = AtomicUsize::new(skip_count);
     
-    generate_combinations(fragments, k).par_bridge().any(|c| {
+    generate_combinations(fragments, k).skip(skip_count).par_bridge().any(|c| {
         if let Some(db) = SledDb::get() {
             let string_c: Vec<&str> = c.iter().map(|s| s.as_ref()).collect();
             if db.is_tried(&string_c).unwrap_or(false) {
@@ -21,6 +27,9 @@ where
         let current = count.fetch_add(1, Ordering::SeqCst);
         if current % 100 == 0 {
             println!("Tried {} combinations...", current);
+            if let Some(db) = SledDb::get() {
+                let _ = db.save_checkpoint(&current.to_string());
+            }
         }
         
         let result = validator(&c);
@@ -29,9 +38,6 @@ where
             return true;
         }
 
-        // Optional: mark as tried here?
-        // The plan says "skip combinations where is_tried returns true".
-        // Usually we mark as tried AFTER we tried it.
         if let Some(db) = SledDb::get() {
             let string_c: Vec<&str> = c.iter().map(|s| s.as_ref()).collect();
             let _ = db.mark_as_tried(&string_c);
