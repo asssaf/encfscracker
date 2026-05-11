@@ -11,10 +11,10 @@
 - [x] Task: Conductor - User Manual Verification 'Phase 1: Foundation & Setup' (f775e87)
 
 ## Phase 2: Data Persistence
-- [ ] Task: Implement "Tried Combinations" storage
-    - [ ] Write tests for inserting and checking combinations in Sled.
-    - [ ] Implement `mark_as_tried(combination)` in `sled_db.rs`.
-    - [ ] Implement `is_tried(combination)` for efficient lookups.
+- [x] Task: Implement "Tried Combinations" storage (6517367)
+    - [x] Write tests for inserting and checking combinations in Sled.
+    - [x] Implement `mark_as_tried(combination)` in `sled_db.rs`.
+    - [x] Implement `is_tried(combination)` for efficient lookups.
 - [ ] Task: Implement "Progress Metrics" storage
     - [ ] Write tests for saving and loading progress checkpoints.
     - [ ] Implement `save_checkpoint(metrics)` and `load_checkpoint()`.
