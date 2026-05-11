@@ -21,9 +21,9 @@
 - [x] Task: Conductor - User Manual Verification 'Phase 2: Data Persistence' (0cf5546)
 
 ## Phase 3: Logic Integration
-- [ ] Task: Integrate state lookups into the cracking engine
-    - [ ] Modify the fragment combination loop to skip combinations where `is_tried` returns true.
-    - [ ] Ensure parallel workers can efficiently check state without contention.
+- [x] Task: Integrate state lookups into the cracking engine (d1f2512)
+    - [x] Modify the fragment combination loop to skip combinations where `is_tried` returns true.
+    - [x] Ensure parallel workers can efficiently check state without contention.
 - [ ] Task: Implement resume-from-checkpoint logic
     - [ ] At startup, check for existing progress metrics.
     - [ ] Configure the combination generator to start from the saved checkpoint.
