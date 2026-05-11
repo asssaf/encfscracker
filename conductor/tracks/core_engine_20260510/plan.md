@@ -10,9 +10,9 @@
 - [x] Task: Conductor - User Manual Verification 'Phase 1: Foundation & Parsing' (Protocol in workflow.md)
 
 ## Phase 2: Combination Engine
-- [ ] Task: Fragment Combination Logic
-    - [ ] Implement an iterator/generator for permutations of password fragments.
-    - [ ] Unit tests for combination coverage.
+- [x] Task: Fragment Combination Logic 384d477
+    - [x] Implement an iterator/generator for permutations of password fragments.
+    - [x] Unit tests for combination coverage.
 - [ ] Task: Parallel Execution Wrapper
     - [ ] Integrate `rayon` for parallelizing the combination testing loop.
 - [ ] Task: Conductor - User Manual Verification 'Phase 2: Combination Engine' (Protocol in workflow.md)
