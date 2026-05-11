@@ -10,6 +10,11 @@ fn test_parallel_combination_skips_tried() {
     let db_path = dir.path().join("integration_test_db");
     let db = SledDb::init(&db_path).expect("Failed to init DB");
     
+    // Clear trees for a fresh test
+    db.tried_tree().unwrap().clear().unwrap();
+    db.progress_tree().unwrap().clear().unwrap();
+    db.save_checkpoint("0").unwrap();
+
     let fragments = vec!["a", "b", "c"];
     let k = 2;
     
@@ -42,6 +47,11 @@ fn test_parallel_combination_resume_from_checkpoint() {
     let db_path = dir.path().join("resume_test_db");
     let db = SledDb::init(&db_path).expect("Failed to init DB");
     
+    // Clear trees for a fresh test
+    db.tried_tree().unwrap().clear().unwrap();
+    db.progress_tree().unwrap().clear().unwrap();
+    db.save_checkpoint("0").unwrap();
+
     let fragments = vec!["a", "b", "c"];
     let k = 2;
     
