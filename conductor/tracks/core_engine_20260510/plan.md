@@ -26,8 +26,8 @@
 - [ ] Task: Conductor - User Manual Verification 'Phase 3: Cryptographic Validation' (Protocol in workflow.md)
 
 ## Phase 4: Basic CLI & State
-- [~] Task: Command-Line Interface
-    - [ ] Implement `clap` arguments for config file and fragment input.
+- [x] Task: Command-Line Interface ed1fdee
+    - [x] Implement `clap` arguments for config file and fragment input.
 - [ ] Task: Simple Progress Reporting
     - [ ] Implement a basic counter/speedometer for the CLI.
 - [ ] Task: Basic State Persistence
