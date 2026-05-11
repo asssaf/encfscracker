@@ -10,7 +10,7 @@
     - [ ] Define keys for progress metrics (e.g., `current_batch_start`).
 - [x] Task: Conductor - User Manual Verification 'Phase 1: Foundation & Setup' (f775e87)
 
-## Phase 2: Data Persistence
+## Phase 2: Data Persistence [checkpoint: 0cf5546]
 - [x] Task: Implement "Tried Combinations" storage (6517367)
     - [x] Write tests for inserting and checking combinations in Sled.
     - [x] Implement `mark_as_tried(combination)` in `sled_db.rs`.
@@ -18,7 +18,7 @@
 - [x] Task: Implement "Progress Metrics" storage (6475606)
     - [x] Write tests for saving and loading progress checkpoints.
     - [x] Implement `save_checkpoint(metrics)` and `load_checkpoint()`.
-- [ ] Task: Conductor - User Manual Verification 'Phase 2: Data Persistence' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 2: Data Persistence' (0cf5546)
 
 ## Phase 3: Logic Integration
 - [ ] Task: Integrate state lookups into the cracking engine
