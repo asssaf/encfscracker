@@ -17,7 +17,7 @@
     - [x] Integrate `rayon` for parallelizing the combination testing loop.
 - [x] Task: Conductor - User Manual Verification 'Phase 2: Combination Engine' (Protocol in workflow.md) [checkpoint: 0114695]
 
-## Phase 3: Cryptographic Validation
+## Phase 3: Cryptographic Validation [checkpoint: 19842ea]
 - [x] Task: Key Derivation Function (KDF) Implementation 21a3287
     - [x] Implement PBKDF2/Scrypt (as specified in EncfS config) using `RustCrypto`.
 - [~] Task: Master Key Validation
