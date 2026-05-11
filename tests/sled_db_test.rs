@@ -64,3 +64,19 @@ fn test_save_and_load_checkpoint() {
     let loaded = db.load_checkpoint().unwrap().expect("Checkpoint should exist");
     assert_eq!(loaded, checkpoint_val);
 }
+
+#[test]
+fn test_reset_state() {
+    let dir = tempdir().unwrap();
+    let db_path = dir.path().join("reset_test_db");
+    let db = SledDb::open(&db_path).expect("Failed to open DB");
+    
+    db.mark_as_tried(&["a"]).unwrap();
+    db.save_checkpoint("10").unwrap();
+    
+    // Red Phase: reset_state doesn't exist
+    db.reset_state().unwrap();
+    
+    assert!(!db.is_tried(&["a"]).unwrap());
+    assert!(db.load_checkpoint().unwrap().is_none());
+}

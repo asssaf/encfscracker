@@ -61,6 +61,12 @@ impl SledDb {
             None => Ok(None),
         }
     }
+
+    pub fn reset_state(&self) -> anyhow::Result<()> {
+        self.tried_tree()?.clear()?;
+        self.progress_tree()?.clear()?;
+        Ok(())
+    }
 }
 
 impl Clone for SledDb {
