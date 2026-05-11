@@ -32,4 +32,6 @@
     - [x] Implement a basic counter/speedometer for the CLI.
 - [x] Task: Basic State Persistence 91195b6
     - [x] Implement saving/loading tried combinations to a simple file (placeholder for `sled`).
-- [ ] Task: Conductor - User Manual Verification 'Phase 4: Basic CLI & State' (Protocol in workflow.md)
+
+## Phase: Review Fixes
+- [x] Task: Apply review suggestions 3d69b9f
