@@ -20,13 +20,13 @@
 ## Phase 3: Cryptographic Validation [checkpoint: 19842ea]
 - [x] Task: Key Derivation Function (KDF) Implementation 21a3287
     - [x] Implement PBKDF2/Scrypt (as specified in EncfS config) using `RustCrypto`.
-- [~] Task: Master Key Validation
-    - [ ] Implement the logic to decrypt and verify the master key using the derived key.
-    - [ ] Integration test with a small, known EncfS volume.
+- [x] Task: Master Key Validation 19842ea
+    - [x] Implement the logic to decrypt and verify the master key using the derived key.
+    - [x] Integration test with a small, known EncfS volume.
 - [ ] Task: Conductor - User Manual Verification 'Phase 3: Cryptographic Validation' (Protocol in workflow.md)
 
 ## Phase 4: Basic CLI & State
-- [ ] Task: Command-Line Interface
+- [~] Task: Command-Line Interface
     - [ ] Implement `clap` arguments for config file and fragment input.
 - [ ] Task: Simple Progress Reporting
     - [ ] Implement a basic counter/speedometer for the CLI.
