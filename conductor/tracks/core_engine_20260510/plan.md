@@ -28,8 +28,8 @@
 ## Phase 4: Basic CLI & State
 - [x] Task: Command-Line Interface ed1fdee
     - [x] Implement `clap` arguments for config file and fragment input.
-- [~] Task: Simple Progress Reporting
-    - [ ] Implement a basic counter/speedometer for the CLI.
+- [x] Task: Simple Progress Reporting 2a481af
+    - [x] Implement a basic counter/speedometer for the CLI.
 - [ ] Task: Basic State Persistence
     - [ ] Implement saving/loading tried combinations to a simple file (placeholder for `sled`).
 - [ ] Task: Conductor - User Manual Verification 'Phase 4: Basic CLI & State' (Protocol in workflow.md)
