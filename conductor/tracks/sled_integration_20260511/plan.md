@@ -20,14 +20,14 @@
     - [x] Implement `save_checkpoint(metrics)` and `load_checkpoint()`.
 - [x] Task: Conductor - User Manual Verification 'Phase 2: Data Persistence' (0cf5546)
 
-## Phase 3: Logic Integration
+## Phase 3: Logic Integration [checkpoint: 27b622d]
 - [x] Task: Integrate state lookups into the cracking engine (d1f2512)
     - [x] Modify the fragment combination loop to skip combinations where `is_tried` returns true.
     - [x] Ensure parallel workers can efficiently check state without contention.
 - [x] Task: Implement resume-from-checkpoint logic (ca7d82f)
     - [x] At startup, check for existing progress metrics.
     - [x] Configure the combination generator to start from the saved checkpoint.
-- [ ] Task: Conductor - User Manual Verification 'Phase 3: Logic Integration' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 3: Logic Integration' (27b622d)
 
 ## Phase 4: Robustness & Verification
 - [ ] Task: Implement robust recovery and corruption handling
