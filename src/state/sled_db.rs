@@ -1,8 +1,12 @@
 use std::path::Path;
-use sled::Db;
+use sled::{Db, Tree};
 use once_cell::sync::OnceCell;
 
 static INSTANCE: OnceCell<SledDb> = OnceCell::new();
+
+pub const TREE_TRIED_COMBINATIONS: &str = "tried_combinations";
+pub const TREE_PROGRESS: &str = "progress";
+pub const KEY_CURRENT_CHECKPOINT: &str = "current_checkpoint";
 
 pub struct SledDb {
     pub db: Db,
@@ -20,6 +24,14 @@ impl SledDb {
 
     pub fn get() -> Option<&'static Self> {
         INSTANCE.get()
+    }
+
+    pub fn tried_tree(&self) -> anyhow::Result<Tree> {
+        Ok(self.db.open_tree(TREE_TRIED_COMBINATIONS)?)
+    }
+
+    pub fn progress_tree(&self) -> anyhow::Result<Tree> {
+        Ok(self.db.open_tree(TREE_PROGRESS)?)
     }
 }
 
