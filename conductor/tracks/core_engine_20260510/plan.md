@@ -25,7 +25,7 @@
     - [x] Integration test with a small, known EncfS volume.
 - [ ] Task: Conductor - User Manual Verification 'Phase 3: Cryptographic Validation' (Protocol in workflow.md)
 
-## Phase 4: Basic CLI & State
+## Phase 4: Basic CLI & State [checkpoint: 732888b]
 - [x] Task: Command-Line Interface ed1fdee
     - [x] Implement `clap` arguments for config file and fragment input.
 - [x] Task: Simple Progress Reporting 2a481af
