@@ -1,13 +1,13 @@
 # Implementation Plan - Build core EncfS key cracking engine
 
-## Phase 1: Foundation & Parsing
+## Phase 1: Foundation & Parsing [checkpoint: 78e078e]
 - [x] Task: Project Scaffolding 3e15c84
     - [x] Initialize Cargo project.
     - [x] Add dependencies (`clap`, `serde`, `quick-xml`, `anyhow`).
 - [x] Task: EncfS Config Parsing 8fd066f
     - [x] Define Rust structs for `.encfs6.xml` schema.
     - [x] Implement parser and unit tests with sample config files.
-- [ ] Task: Conductor - User Manual Verification 'Phase 1: Foundation & Parsing' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 1: Foundation & Parsing' (Protocol in workflow.md)
 
 ## Phase 2: Combination Engine
 - [ ] Task: Fragment Combination Logic
