@@ -34,4 +34,4 @@
     - [x] Implement saving/loading tried combinations to a simple file (placeholder for `sled`).
 
 ## Phase: Review Fixes
-- [x] Task: Apply review suggestions 60fd601
+- [x] Task: Apply review suggestions b80ba65
