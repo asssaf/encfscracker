@@ -4,7 +4,7 @@ type HmacSha256 = hmac::Hmac<Sha256>;
 
 pub fn derive_key(password: &[u8], salt: &[u8], iterations: u32) -> Vec<u8> {
     let mut derived_key = vec![0u8; 32];
-    pbkdf2::<HmacSha256>(password, salt, iterations, &mut derived_key);
+    let _ = pbkdf2::<HmacSha256>(password, salt, iterations, &mut derived_key);
     derived_key
 }
 
