@@ -1,5 +1,7 @@
 use std::rc::Rc;
 
+pub mod parallel;
+
 pub fn generate_combinations<T: Clone + 'static>(fragments: &[T], k: usize) -> impl Iterator<Item = Vec<T>> {
     let fragments = Rc::new(fragments.to_vec());
     let n = fragments.len();
