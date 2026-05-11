@@ -18,7 +18,7 @@
 - [x] Task: Conductor - User Manual Verification 'Phase 2: Combination Engine' (Protocol in workflow.md) [checkpoint: 0114695]
 
 ## Phase 3: Cryptographic Validation
-- [ ] Task: Key Derivation Function (KDF) Implementation
+- [~] Task: Key Derivation Function (KDF) Implementation
     - [ ] Implement PBKDF2/Scrypt (as specified in EncfS config) using `RustCrypto`.
 - [ ] Task: Master Key Validation
     - [ ] Implement the logic to decrypt and verify the master key using the derived key.
