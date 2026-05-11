@@ -20,7 +20,7 @@
 ## Phase 3: Cryptographic Validation
 - [x] Task: Key Derivation Function (KDF) Implementation 21a3287
     - [x] Implement PBKDF2/Scrypt (as specified in EncfS config) using `RustCrypto`.
-- [ ] Task: Master Key Validation
+- [~] Task: Master Key Validation
     - [ ] Implement the logic to decrypt and verify the master key using the derived key.
     - [ ] Integration test with a small, known EncfS volume.
 - [ ] Task: Conductor - User Manual Verification 'Phase 3: Cryptographic Validation' (Protocol in workflow.md)
