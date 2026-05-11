@@ -36,3 +36,17 @@ fn test_sled_db_trees() {
     assert!(tried_tree.contains_key("test_pass").unwrap());
     assert_eq!(progress_tree.get(encfs_cracker::state::sled_db::KEY_CURRENT_CHECKPOINT).unwrap().unwrap(), "123".as_bytes());
 }
+
+#[test]
+fn test_mark_and_check_tried_combinations() {
+    let dir = tempdir().unwrap();
+    let db_path = dir.path().join("tried_test_db");
+    let db = SledDb::open(&db_path).expect("Failed to open DB");
+    
+    let combo = vec!["pass1", "pass2"];
+    
+    // Red Phase: These methods don't exist yet
+    assert!(!db.is_tried(&combo).unwrap());
+    db.mark_as_tried(&combo).unwrap();
+    assert!(db.is_tried(&combo).unwrap());
+}

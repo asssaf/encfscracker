@@ -33,6 +33,19 @@ impl SledDb {
     pub fn progress_tree(&self) -> anyhow::Result<Tree> {
         Ok(self.db.open_tree(TREE_PROGRESS)?)
     }
+
+    pub fn mark_as_tried(&self, combination: &[&str]) -> anyhow::Result<()> {
+        let tree = self.tried_tree()?;
+        let key = combination.join("\0");
+        tree.insert(key, &[])?;
+        Ok(())
+    }
+
+    pub fn is_tried(&self, combination: &[&str]) -> anyhow::Result<bool> {
+        let tree = self.tried_tree()?;
+        let key = combination.join("\0");
+        Ok(tree.contains_key(key)?)
+    }
 }
 
 impl Clone for SledDb {
