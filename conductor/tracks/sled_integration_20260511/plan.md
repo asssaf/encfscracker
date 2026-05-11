@@ -15,9 +15,9 @@
     - [x] Write tests for inserting and checking combinations in Sled.
     - [x] Implement `mark_as_tried(combination)` in `sled_db.rs`.
     - [x] Implement `is_tried(combination)` for efficient lookups.
-- [ ] Task: Implement "Progress Metrics" storage
-    - [ ] Write tests for saving and loading progress checkpoints.
-    - [ ] Implement `save_checkpoint(metrics)` and `load_checkpoint()`.
+- [x] Task: Implement "Progress Metrics" storage (6475606)
+    - [x] Write tests for saving and loading progress checkpoints.
+    - [x] Implement `save_checkpoint(metrics)` and `load_checkpoint()`.
 - [ ] Task: Conductor - User Manual Verification 'Phase 2: Data Persistence' (Protocol in workflow.md)
 
 ## Phase 3: Logic Integration
