@@ -34,7 +34,7 @@
     - [x] Write tests simulating database corruption.
     - [x] Implement error handling for sled operations.
     - [x] Add a `--reset-state` flag to the CLI to clear the database.
-- [ ] Task: Performance Benchmarking
-    - [ ] Benchmark the cracking engine with and without state persistence.
-    - [ ] Optimize lookups if performance degradation exceeds 10%.
+- [x] Task: Performance Benchmarking (18518ca)
+    - [x] Benchmark the cracking engine with and without state persistence.
+    - [x] Optimize lookups if performance degradation exceeds 10%.
 - [ ] Task: Conductor - User Manual Verification 'Phase 4: Robustness & Verification' (Protocol in workflow.md)
