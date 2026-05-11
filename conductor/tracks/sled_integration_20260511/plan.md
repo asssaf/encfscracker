@@ -5,7 +5,7 @@
     - [ ] Add `sled` to `Cargo.toml`.
     - [ ] Create `src/state/sled_db.rs` and define the basic database structure.
     - [ ] Implement a singleton or thread-safe handle for the sled database.
-- [ ] Task: Define data schemas and partitioning strategy
+- [x] Task: Define data schemas and partitioning strategy (1981515)
     - [ ] Define keys for tried combinations (e.g., hash or index-based).
     - [ ] Define keys for progress metrics (e.g., `current_batch_start`).
 - [ ] Task: Conductor - User Manual Verification 'Phase 1: Foundation & Setup' (Protocol in workflow.md)
