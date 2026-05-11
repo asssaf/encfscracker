@@ -30,6 +30,6 @@
     - [x] Implement `clap` arguments for config file and fragment input.
 - [x] Task: Simple Progress Reporting 2a481af
     - [x] Implement a basic counter/speedometer for the CLI.
-- [~] Task: Basic State Persistence
-    - [ ] Implement saving/loading tried combinations to a simple file (placeholder for `sled`).
+- [x] Task: Basic State Persistence 91195b6
+    - [x] Implement saving/loading tried combinations to a simple file (placeholder for `sled`).
 - [ ] Task: Conductor - User Manual Verification 'Phase 4: Basic CLI & State' (Protocol in workflow.md)
