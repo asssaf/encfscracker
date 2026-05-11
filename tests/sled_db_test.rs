@@ -50,3 +50,17 @@ fn test_mark_and_check_tried_combinations() {
     db.mark_as_tried(&combo).unwrap();
     assert!(db.is_tried(&combo).unwrap());
 }
+
+#[test]
+fn test_save_and_load_checkpoint() {
+    let dir = tempdir().unwrap();
+    let db_path = dir.path().join("checkpoint_test_db");
+    let db = SledDb::open(&db_path).expect("Failed to open DB");
+    
+    let checkpoint_val = "batch_1000";
+    
+    // Red Phase: These methods don't exist yet
+    db.save_checkpoint(checkpoint_val).unwrap();
+    let loaded = db.load_checkpoint().unwrap().expect("Checkpoint should exist");
+    assert_eq!(loaded, checkpoint_val);
+}

@@ -46,6 +46,21 @@ impl SledDb {
         let key = combination.join("\0");
         Ok(tree.contains_key(key)?)
     }
+
+    pub fn save_checkpoint(&self, value: &str) -> anyhow::Result<()> {
+        let tree = self.progress_tree()?;
+        tree.insert(KEY_CURRENT_CHECKPOINT, value)?;
+        Ok(())
+    }
+
+    pub fn load_checkpoint(&self) -> anyhow::Result<Option<String>> {
+        let tree = self.progress_tree()?;
+        let res = tree.get(KEY_CURRENT_CHECKPOINT)?;
+        match res {
+            Some(ivec) => Ok(Some(String::from_utf8(ivec.to_vec())?)),
+            None => Ok(None),
+        }
+    }
 }
 
 impl Clone for SledDb {
