@@ -7,10 +7,9 @@ where
     T: Clone + Send + Sync + 'static,
     F: Fn(&[T]) -> bool + Send + Sync 
 {
-    let combinations: Vec<Vec<T>> = generate_combinations(fragments, k).collect();
     let count = AtomicUsize::new(0);
     
-    combinations.into_par_iter().any(|c| {
+    generate_combinations(fragments, k).par_bridge().any(|c| {
         let current = count.fetch_add(1, Ordering::SeqCst);
         if current % 100 == 0 {
             println!("Tried {} combinations...", current);

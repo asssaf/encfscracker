@@ -15,12 +15,6 @@ pub struct EncfsConfig {
 }
 
 #[derive(Debug, Deserialize)]
-struct RawConfig {
-    #[serde(rename = "cfg")]
-    pub cfg: EncfsConfig,
-}
-
-#[derive(Debug, Deserialize)]
 struct BoostSerialization {
     #[serde(rename = "cfg")]
     pub cfg: EncfsConfig,

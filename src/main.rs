@@ -14,6 +14,5 @@ struct Args {
 fn main() -> anyhow::Result<()> {
     let args = Args::parse();
     println!("Config path: {:?}", args.config);
-    println!("Fragments: {:?}", args.fragments);
     Ok(())
 }
