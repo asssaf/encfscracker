@@ -41,7 +41,7 @@ Goal: Implement a single-threaded version of the cracker that integrates all com
         - Use `std::process::exit(0)`.
 - [x] Task: Conductor - User Manual Verification 'Phase 2: Sequential Orchestration' (Protocol in workflow.md) 9391edd
 
-## Phase 3: Parallelization & Optimization
+## Phase 3: Parallelization & Optimization [checkpoint: 51c8583]
 Goal: Move to a multi-threaded architecture and optimize state persistence.
 
 - [x] Task: Implement `ParallelCracker` using a worker pool or `rayon` for concurrent verification c55a086
