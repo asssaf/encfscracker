@@ -4,10 +4,16 @@ use base64::{engine::general_purpose, Engine as _};
 use crate::crypto::derive_key;
 
 #[derive(Debug, Deserialize)]
+#[serde(rename = "boost_serialization")]
 pub struct EncfSConfig {
-    #[serde(rename = "salt")]
-    pub salt: String,
-    #[serde(rename = "iterations")]
+    pub cfg: ConfigInner,
+}
+
+#[derive(Debug, Deserialize)]
+pub struct ConfigInner {
+    #[serde(rename = "saltData")]
+    pub salt_data: String,
+    #[serde(rename = "kdfIterations")]
     pub iterations: u32,
     #[serde(rename = "keySize")]
     pub key_size: usize,
@@ -22,11 +28,11 @@ impl EncfSConfig {
     }
 
     pub fn salt_bytes(&self) -> anyhow::Result<Vec<u8>> {
-        Ok(general_purpose::STANDARD.decode(&self.salt)?)
+        Ok(general_purpose::STANDARD.decode(&self.cfg.salt_data)?)
     }
 
     pub fn encoded_key_data_bytes(&self) -> anyhow::Result<Vec<u8>> {
-        Ok(general_purpose::STANDARD.decode(&self.encoded_key_data)?)
+        Ok(general_purpose::STANDARD.decode(&self.cfg.encoded_key_data)?)
     }
 
     pub fn verify_password(&self, password: &str) -> bool {
@@ -34,16 +40,19 @@ impl EncfSConfig {
             Ok(s) => s,
             Err(_) => return false,
         };
-        let derived_key = derive_key(password.as_bytes(), &salt, self.iterations);
+        let encoded_key_data = match self.encoded_key_data_bytes() {
+            Ok(d) => d,
+            Err(_) => return false,
+        };
         
-        // This is a placeholder for actual decryption/verification.
-        // Given EncfS, we would typically attempt to decrypt the encodedKeyData
-        // and check the result. For this task, let's assume if it is at least 
-        // derived successfully, we are part way there, but I need to do 
-        // real verification if possible.
-        // Since I don't have the full EncfS spec, I'll simulate a check
-        // that ensures derived_key length is correct.
-        derived_key.len() == self.key_size
+        let kek = derive_key(password.as_bytes(), &salt, self.cfg.iterations);
+        let iv = vec![0u8; 16]; // EncFS config uses zero IV for master key
+        
+        if let Ok(decrypted_key) = crate::crypto::decrypt_encoded_key_data(&kek, &iv, &encoded_key_data) {
+            return crate::crypto::validate_decrypted_key(&decrypted_key);
+        }
+        
+        false
     }
 }
 
@@ -53,16 +62,18 @@ mod tests {
 
     #[test]
     fn test_parse_encfs_config() {
-        let xml = r#"<config>
-    <salt>SGVsbG8=</salt>
-    <iterations>1000</iterations>
-    <keySize>32</keySize>
-    <encodedKeyData>S2V5RGF0YQ==</encodedKeyData>
-</config>"#;
+        let xml = r#"<boost_serialization>
+    <cfg>
+        <saltData>SGVsbG8=</saltData>
+        <kdfIterations>1000</kdfIterations>
+        <keySize>32</keySize>
+        <encodedKeyData>S2V5RGF0YQ==</encodedKeyData>
+    </cfg>
+</boost_serialization>"#;
         let config = EncfSConfig::from_xml(xml).unwrap();
         assert_eq!(config.salt_bytes().unwrap(), b"Hello");
-        assert_eq!(config.iterations, 1000);
-        assert_eq!(config.key_size, 32);
+        assert_eq!(config.cfg.iterations, 1000);
+        assert_eq!(config.cfg.key_size, 32);
         assert_eq!(config.encoded_key_data_bytes().unwrap(), b"KeyData");
     }
 }

@@ -18,6 +18,7 @@ impl ParallelCracker {
         let is_running = Arc::new(AtomicBool::new(true));
         
         let r = is_running.clone();
+        #[cfg(not(test))]
         ctrlc::set_handler(move || {
             r.store(false, Ordering::SeqCst);
         })?;
@@ -32,7 +33,9 @@ impl ParallelCracker {
 
     pub fn run(&self) -> anyhow::Result<()> {
         for k in 1..=self.config.fragments.len() {
+            println!("Generating combinations of length {}...", k);
             let combinations: Vec<Vec<String>> = generate_combinations(&self.config.fragments, k).collect();
+            println!("Testing {} combinations...", combinations.len());
             
             let found = combinations.par_iter().try_for_each(|combo| -> anyhow::Result<()> {
                 if !self.is_running.load(Ordering::SeqCst) {
@@ -95,12 +98,14 @@ mod tests {
         let dir = tempdir().unwrap();
         let db_path = dir.path().join("test.db");
         
-        let xml = r#"<config>
-    <salt>SGVsbG8=</salt>
-    <iterations>1000</iterations>
-    <keySize>32</keySize>
-    <encodedKeyData>S2V5RGF0YQ==</encodedKeyData>
-</config>"#;
+        let xml = r#"<boost_serialization>
+    <cfg>
+        <saltData>SGVsbG8=</saltData>
+        <kdfIterations>1000</kdfIterations>
+        <keySize>32</keySize>
+        <encodedKeyData>S2V5RGF0YQ==</encodedKeyData>
+    </cfg>
+</boost_serialization>"#;
         let encfs_config = EncfSConfig::from_xml(xml).unwrap();
         let config = CrackerConfig {
             fragments: vec!["a".to_string(), "b".to_string()],
