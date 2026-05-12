@@ -61,7 +61,7 @@ Goal: Move to a multi-threaded architecture and optimize state persistence.
         - Flush all pending batches to `sled` before exiting.
 - [x] Task: Conductor - User Manual Verification 'Phase 3: Parallelization & Optimization' (Protocol in workflow.md) c55a086
 
-## Phase 4: CLI Integration & Final Polish
+## Phase 4: CLI Integration & Final Polish [checkpoint: 951ac65]
 Goal: Connect the orchestration logic to the `clap` CLI and perform final testing.
 
 - [x] Task: Update `main.rs` to initialize and run the `ParallelCracker` d093ffa
