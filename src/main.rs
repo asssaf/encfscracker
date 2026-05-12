@@ -18,6 +18,9 @@ fn main() -> anyhow::Result<()> {
     let args = Args::parse();
     println!("Config path: {:?}", args.config);
 
+    // Initialize state database
+    let _db = encfs_cracker::state::sled_db::SledDb::init("cracker_state.db")?;
+
     if args.reset_state {
         if let Some(db) = encfs_cracker::state::sled_db::SledDb::get() {
             db.reset_state()?;

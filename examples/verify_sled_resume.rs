@@ -11,7 +11,7 @@ fn main() -> anyhow::Result<()> {
         fs::remove_dir_all(db_path)?;
     }
     
-    let db = SledDb::init(db_path)?;
+    let _db = SledDb::init(db_path)?;
     let fragments = vec!["a", "b", "c", "d"];
     let k = 2; // 4P2 = 12 combinations
     
