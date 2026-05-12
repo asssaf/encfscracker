@@ -8,11 +8,10 @@ use std::sync::Arc;
 fn test_parallel_combination_skips_tried() {
     let dir = tempdir().unwrap();
     let db_path = dir.path().join("integration_test_db");
-    let db = SledDb::init(&db_path).expect("Failed to init DB");
+    let db = SledDb::open(&db_path).expect("Failed to open DB");
     
     // Clear trees for a fresh test
-    db.tried_tree().unwrap().clear().unwrap();
-    db.progress_tree().unwrap().clear().unwrap();
+    db.reset_state().unwrap();
     db.save_checkpoint("0").unwrap();
 
     let fragments = vec!["a", "b", "c"];
@@ -33,7 +32,7 @@ fn test_parallel_combination_skips_tried() {
         false
     };
     
-    parallel_combination_test(&fragments, k, validator);
+    parallel_combination_test(&fragments, k, validator, Some(&db));
     
     // Total combinations for 3P2 = 3 * 2 = 6
     // (a,b), (a,c), (b,a), (b,c), (c,a), (c,b)
@@ -45,11 +44,10 @@ fn test_parallel_combination_skips_tried() {
 fn test_parallel_combination_resume_from_checkpoint() {
     let dir = tempdir().unwrap();
     let db_path = dir.path().join("resume_test_db");
-    let db = SledDb::init(&db_path).expect("Failed to init DB");
+    let db = SledDb::open(&db_path).expect("Failed to open DB");
     
     // Clear trees for a fresh test
-    db.tried_tree().unwrap().clear().unwrap();
-    db.progress_tree().unwrap().clear().unwrap();
+    db.reset_state().unwrap();
     db.save_checkpoint("0").unwrap();
 
     let fragments = vec!["a", "b", "c"];
@@ -73,7 +71,7 @@ fn test_parallel_combination_resume_from_checkpoint() {
     };
     
     // Red Phase: Resume logic not implemented yet
-    parallel_combination_test(&fragments, k, validator);
+    parallel_combination_test(&fragments, k, validator, Some(&db));
     
     // If resume works, only 3 should be tried
     assert_eq!(call_count.load(Ordering::SeqCst), 3, "Should have resumed from checkpoint 3");

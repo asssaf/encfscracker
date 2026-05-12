@@ -8,7 +8,7 @@ fn main() {
         c == &["c", "a"]
     };
     
-    let found = parallel_combination_test(&fragments, k, validator);
+    let found = parallel_combination_test(&fragments, k, validator, None);
     if found {
         println!("Success: Found combination!");
     } else {

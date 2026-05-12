@@ -10,7 +10,7 @@ mod tests {
         let k = 2;
         let validator = |c: &[&str]| c == &["2", "4"];
         
-        let found = parallel_combination_test(&fragments, k, validator);
+        let found = parallel_combination_test(&fragments, k, validator, None);
         assert!(found);
     }
 }

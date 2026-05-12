@@ -18,7 +18,7 @@ fn main() -> anyhow::Result<()> {
             }
             std::hint::black_box(sum);
             false
-        });
+        }, None);
         let duration = start.elapsed();
         println!("Stateless duration: {:?}", duration);
     }
@@ -38,7 +38,7 @@ fn main() -> anyhow::Result<()> {
             }
             std::hint::black_box(sum);
             false
-        });
+        }, None);
         let duration = start.elapsed();
         println!("Persistent state duration: {:?}", duration);
     }

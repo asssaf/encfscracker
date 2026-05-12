@@ -1,3 +1,5 @@
+pub mod encfs_config;
+
 use pbkdf2::pbkdf2;
 use sha2::Sha256;
 type HmacSha256 = hmac::Hmac<Sha256>;

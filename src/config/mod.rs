@@ -1,5 +1,7 @@
 use serde::Deserialize;
 use quick_xml::de::from_str;
+use std::path::PathBuf;
+use crate::crypto::encfs_config::EncfSConfig;
 
 #[derive(Debug, Deserialize, PartialEq)]
 pub struct EncfsConfig {
@@ -25,4 +27,10 @@ impl EncfsConfig {
         let wrapper: BoostSerialization = from_str(xml)?;
         Ok(wrapper.cfg)
     }
+}
+
+pub struct CrackerConfig {
+    pub fragments: Vec<String>,
+    pub encfs_config: EncfSConfig,
+    pub db_path: PathBuf,
 }
