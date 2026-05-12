@@ -1,6 +1,6 @@
 # Implementation Plan - Main Cracker Orchestration
 
-## Phase 1: Foundation & EncfS Verification
+## Phase 1: Foundation & EncfS Verification [checkpoint: 26e6917]
 Goal: Establish the core verification logic and prepare the integration points.
 
 - [x] Task: Implement EncfS configuration parsing and key derivation logic 45f7f6d
