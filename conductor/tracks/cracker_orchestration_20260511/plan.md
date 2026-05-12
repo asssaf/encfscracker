@@ -20,7 +20,7 @@ Goal: Establish the core verification logic and prepare the integration points.
         - Add a method to load these from `clap` arguments.
 - [x] Task: Conductor - User Manual Verification 'Phase 1: Foundation & EncfS Verification' (Protocol in workflow.md) 45f7f6d
 
-## Phase 2: Sequential Orchestration
+## Phase 2: Sequential Orchestration [checkpoint: 55fb270]
 Goal: Implement a single-threaded version of the cracker that integrates all components.
 
 - [x] Task: Implement `SequentialCracker` that iterates through combinations and verifies them 9391edd
