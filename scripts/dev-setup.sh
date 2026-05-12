@@ -6,4 +6,7 @@ apt update
 
 apt install -y cargo
 
+# needed for cargo-tarpaulin
+apt install -y pkg-config libssl-dev
+
 
