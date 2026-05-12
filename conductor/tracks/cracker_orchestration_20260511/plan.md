@@ -3,7 +3,7 @@
 ## Phase 1: Foundation & EncfS Verification
 Goal: Establish the core verification logic and prepare the integration points.
 
-- [ ] Task: Implement EncfS configuration parsing and key derivation logic
+- [x] Task: Implement EncfS configuration parsing and key derivation logic 45f7f6d
     - **Implementation Notes:**
         - Create `src/crypto/encfs_config.rs`.
         - Use `roxmltree` to parse `.encfs6.xml`. Focus on extracting `<salt>`, `<iterations>`, `<keySize>`, and `<encodedKeyData>`.
@@ -13,12 +13,12 @@ Goal: Establish the core verification logic and prepare the integration points.
             1. Deriving a master key from the password, salt, and iterations using PBKDF2-HMAC-SHA256 (already partially in `src/crypto/mod.rs`).
             2. Using the derived master key to decrypt `encodedKeyData` (usually AES).
             3. Verifying the integrity of the decrypted data (EncfS uses a specific checksum/format for the header).
-- [ ] Task: Create a unified `CrackerConfig` struct to hold fragments, config, and state
+- [x] Task: Create a unified `CrackerConfig` struct to hold fragments, config, and state 45f7f6d
     - **Implementation Notes:**
         - Define `struct CrackerConfig` in `src/config/mod.rs`.
         - Include `fragments: Vec<String>`, `encfs_config: EncfSConfig`, `db_path: PathBuf`.
         - Add a method to load these from `clap` arguments.
-- [ ] Task: Conductor - User Manual Verification 'Phase 1: Foundation & EncfS Verification' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 1: Foundation & EncfS Verification' (Protocol in workflow.md) 45f7f6d
 
 ## Phase 2: Sequential Orchestration
 Goal: Implement a single-threaded version of the cracker that integrates all components.
