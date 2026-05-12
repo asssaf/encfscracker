@@ -23,23 +23,23 @@ Goal: Establish the core verification logic and prepare the integration points.
 ## Phase 2: Sequential Orchestration
 Goal: Implement a single-threaded version of the cracker that integrates all components.
 
-- [ ] Task: Implement `SequentialCracker` that iterates through combinations and verifies them
+- [x] Task: Implement `SequentialCracker` that iterates through combinations and verifies them 9391edd
     - **Implementation Notes:**
         - Create `src/orchestration/sequential.rs`.
         - Use a loop for `k` from 1 to `fragments.len()`.
         - Call `generate_combinations(fragments, k)` from `src/fragment_combination/mod.rs`.
         - Join the combination into a string and call `verify_password`.
-- [ ] Task: Integrate `SledDb` into `SequentialCracker` for persistence (individual checks)
+- [x] Task: Integrate `SledDb` into `SequentialCracker` for persistence (individual checks) 9391edd
     - **Implementation Notes:**
         - Before calling `verify_password`, call `db.is_tried(&combination)`.
         - If `true`, skip.
         - After a failed `verify_password`, call `db.mark_as_tried(&combination)`.
-- [ ] Task: Implement success handling (printing and saving password)
+- [x] Task: Implement success handling (printing and saving password) 9391edd
     - **Implementation Notes:**
         - If `verify_password` returns `true`, print to stdout with a clear message.
         - Use `std::fs::write` to save the password to `recovered_password.txt`.
         - Use `std::process::exit(0)`.
-- [ ] Task: Conductor - User Manual Verification 'Phase 2: Sequential Orchestration' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 2: Sequential Orchestration' (Protocol in workflow.md) 9391edd
 
 ## Phase 3: Parallelization & Optimization
 Goal: Move to a multi-threaded architecture and optimize state persistence.
