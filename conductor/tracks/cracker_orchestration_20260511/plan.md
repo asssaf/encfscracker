@@ -44,22 +44,22 @@ Goal: Implement a single-threaded version of the cracker that integrates all com
 ## Phase 3: Parallelization & Optimization
 Goal: Move to a multi-threaded architecture and optimize state persistence.
 
-- [ ] Task: Implement `ParallelCracker` using a worker pool or `rayon` for concurrent verification
+- [x] Task: Implement `ParallelCracker` using a worker pool or `rayon` for concurrent verification c55a086
     - **Implementation Notes:**
         - Create `src/orchestration/parallel.rs`.
         - Use `rayon::iter::ParallelIterator` on the combinations.
         - Since `generate_combinations` returns an iterator, you might need to bridge it to a parallel iterator or collect chunks.
         - **Critical:** Ensure `SledDb` and `EncfSConfig` are shared safely (they should be `Arc` or have a `'static` lifetime).
-- [ ] Task: Implement batched state updates in `ParallelCracker` to improve performance
+- [x] Task: Implement batched state updates in `ParallelCracker` to improve performance c55a086
     - **Implementation Notes:**
         - Instead of calling `db.mark_as_tried` for every failure, use a thread-local buffer or a channel to collect tried combinations.
         - Periodically (e.g., every 1000 attempts or every 1 second) batch-insert into `sled` using `db.db.transaction`.
-- [ ] Task: Implement graceful shutdown and signal handling to ensure state consistency
+- [x] Task: Implement graceful shutdown and signal handling to ensure state consistency c55a086
     - **Implementation Notes:**
         - Use `ctrlc` crate.
         - On `SIGINT`, set a "stopping" flag that workers check.
         - Flush all pending batches to `sled` before exiting.
-- [ ] Task: Conductor - User Manual Verification 'Phase 3: Parallelization & Optimization' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 3: Parallelization & Optimization' (Protocol in workflow.md) c55a086
 
 ## Phase 4: CLI Integration & Final Polish
 Goal: Connect the orchestration logic to the `clap` CLI and perform final testing.
