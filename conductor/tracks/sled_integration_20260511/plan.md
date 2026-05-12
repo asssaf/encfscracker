@@ -38,3 +38,6 @@
     - [x] Benchmark the cracking engine with and without state persistence.
     - [x] Optimize lookups if performance degradation exceeds 10%.
 - [x] Task: Conductor - User Manual Verification 'Phase 4: Robustness & Verification' (7b05f07)
+
+## Phase: Review Fixes
+- [x] Task: Apply review suggestions (0797fc4)
