@@ -1,26 +1,27 @@
-use encfs_cracker::crypto::decrypt_encoded_key_data;
-use aes::Aes256;
-use cfb_mode::{Decryptor, Encryptor};
-use aes::cipher::KeyIvInit;
+use encfs_cracker::crypto::validate_decrypted_key;
 
-type Aes256CfbDec = Decryptor<Aes256>;
-type Aes256CfbEnc = Encryptor<Aes256>;
-
-pub fn validate_decrypted_key(data: &[u8]) -> bool {
-    // Placeholder for magic header check. 
-    // Research suggests EncfS v6 decrypted data starts with a 4-byte checksum.
-    // I'll check if it has enough bytes to be valid.
-    data.len() >= 4
+#[test]
+fn test_validate_decrypted_key_valid() {
+    let mut data = vec![0x17, 0x7b, 0x25, 0xd9, 0x49, 0x0d, 0xb8, 0xaa];
+    data.extend_from_slice(&[0u8; 32]); // add some "key" data
+    assert!(validate_decrypted_key(&data));
 }
 
 #[test]
-fn test_validate_decrypted_key_fails_on_short_data() {
-    let data = vec![0u8; 3];
+fn test_validate_decrypted_key_invalid_header() {
+    let mut data = vec![0x00, 0x7b, 0x25, 0xd9, 0x49, 0x0d, 0xb8, 0xaa];
+    data.extend_from_slice(&[0u8; 32]);
     assert!(!validate_decrypted_key(&data));
 }
 
 #[test]
-fn test_validate_decrypted_key_passes_on_valid_length() {
-    let data = vec![0u8; 32];
-    assert!(validate_decrypted_key(&data));
+fn test_validate_decrypted_key_too_short() {
+    let data = vec![0x17, 0x7b, 0x25, 0xd9, 0x49, 0x0d, 0xb8];
+    assert!(!validate_decrypted_key(&data));
+}
+
+#[test]
+fn test_validate_decrypted_key_empty() {
+    let data = vec![];
+    assert!(!validate_decrypted_key(&data));
 }

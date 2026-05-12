@@ -1,9 +1,8 @@
 use encfs_cracker::crypto::decrypt_encoded_key_data;
 use aes::Aes256;
-use cfb_mode::{Decryptor, Encryptor};
+use cfb_mode::Encryptor;
 use aes::cipher::{KeyIvInit, AsyncStreamCipher};
 
-type Aes256CfbDec = Decryptor<Aes256>;
 type Aes256CfbEnc = Encryptor<Aes256>;
 
 #[test]

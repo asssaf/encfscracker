@@ -17,11 +17,13 @@ impl ParallelCracker {
         let db = SledDb::open(&config.db_path)?;
         let is_running = Arc::new(AtomicBool::new(true));
         
-        let r = is_running.clone();
         #[cfg(not(test))]
-        ctrlc::set_handler(move || {
-            r.store(false, Ordering::SeqCst);
-        })?;
+        {
+            let r = is_running.clone();
+            ctrlc::set_handler(move || {
+                r.store(false, Ordering::SeqCst);
+            })?;
+        }
 
         Ok(Self { 
             config: Arc::new(config), 

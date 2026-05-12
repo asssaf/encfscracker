@@ -28,27 +28,39 @@ impl EncfSConfig {
     }
 
     pub fn salt_bytes(&self) -> anyhow::Result<Vec<u8>> {
-        Ok(general_purpose::STANDARD.decode(&self.cfg.salt_data)?)
+        let cleaned = self.cfg.salt_data.replace(|c: char| c.is_whitespace(), "");
+        Ok(general_purpose::STANDARD.decode(&cleaned)?)
     }
 
     pub fn encoded_key_data_bytes(&self) -> anyhow::Result<Vec<u8>> {
-        Ok(general_purpose::STANDARD.decode(&self.cfg.encoded_key_data)?)
+        let cleaned = self.cfg.encoded_key_data.replace(|c: char| c.is_whitespace(), "");
+        Ok(general_purpose::STANDARD.decode(&cleaned)?)
     }
 
     pub fn verify_password(&self, password: &str) -> bool {
         let salt = match self.salt_bytes() {
             Ok(s) => s,
-            Err(_) => return false,
+            Err(e) => {
+                eprintln!("Salt decode error: {}", e);
+                return false;
+            },
         };
         let encoded_key_data = match self.encoded_key_data_bytes() {
             Ok(d) => d,
-            Err(_) => return false,
+            Err(e) => {
+                eprintln!("Key data decode error: {}", e);
+                return false;
+            },
         };
         
         let kek = derive_key(password.as_bytes(), &salt, self.cfg.iterations);
         let iv = vec![0u8; 16]; // EncFS config uses zero IV for master key
         
         if let Ok(decrypted_key) = crate::crypto::decrypt_encoded_key_data(&kek, &iv, &encoded_key_data) {
+            println!("Decrypted key len: {}", decrypted_key.len());
+            if decrypted_key.len() >= 8 {
+                println!("Decrypted key header: {:02x?}", &decrypted_key[0..8]);
+            }
             return crate::crypto::validate_decrypted_key(&decrypted_key);
         }
         

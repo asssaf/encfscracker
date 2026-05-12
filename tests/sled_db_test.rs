@@ -18,7 +18,7 @@ fn test_sled_db_singleton() {
     let db = SledDb::init(&db_path).expect("Failed to init DB");
     let same_db = SledDb::get().expect("Failed to get DB");
     
-    assert_eq!(db.db.size_on_disk().unwrap(), same_db.db.size_on_disk().unwrap());
+    assert!(std::ptr::eq(db, same_db));
 }
 
 #[test]
