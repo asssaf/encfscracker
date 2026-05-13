@@ -1,4 +1,4 @@
-use encfs_cracker::crypto::decrypt_encoded_key_data;
+use encfs_cracker::crypto::{decrypt_encoded_key_data, derive_key};
 
 // Define mock parameters for testing decrypt_encoded_key_data.
 const MOCK_PASSWORD: &[u8] = b"a_very_secret_password_for_testing_12345"; // 32 bytes
@@ -19,12 +19,15 @@ fn test_decrypt_encoded_key_data_structure() {
     // Simulate encrypted data (48 bytes).
     encoded_data[4..52].copy_from_slice(&[1u8; 48]);
 
+    let kek = derive_key(MOCK_PASSWORD, MOCK_SALT, MOCK_ITERATIONS);
+    let master_key = &kek[0..32];
+    let master_iv = &kek[32..48];
+
     // Call the function with mock parameters and dummy encoded_data.
     let decrypted_data = decrypt_encoded_key_data(
         encoded_data.as_slice(),
-        MOCK_ITERATIONS,
-        MOCK_SALT,
-        MOCK_PASSWORD
+        master_key,
+        master_iv
     ).unwrap();
 
     // Assert that the decrypted data has the expected length.

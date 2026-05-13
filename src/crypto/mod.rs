@@ -53,13 +53,10 @@ pub fn flip_bytes(buf: &mut [u8]) {
     buf.reverse();
 }
 
-pub fn decrypt_encoded_key_data(encoded_data: &[u8], iterations: u32, salt: &[u8], password: &[u8]) -> Result<Vec<u8>> {
+pub fn decrypt_encoded_key_data(encoded_data: &[u8], master_key: &[u8], master_iv: &[u8]) -> Result<Vec<u8>> {
     if encoded_data.len() < 52 {
         return Err(anyhow!("Encoded data too short"));
     }
-    let master_key_iv = derive_key(password, salt, iterations);
-    let master_key = &master_key_iv[0..32];
-    let master_iv = &master_key_iv[32..48];
 
     // The first 4 bytes of encoded_data are the checksum. The rest is encrypted.
     let checksum = u32::from_be_bytes(encoded_data[0..4].try_into()?);

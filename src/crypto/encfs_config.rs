@@ -59,9 +59,11 @@ impl EncfSConfig {
         let checksum = u32::from_be_bytes(checksum_bytes);
 
         let kek = derive_key(password.as_bytes(), &salt, self.cfg.iterations);
+        let master_key = &kek[0..32];
+        let master_iv = &kek[32..48];
         
-        if let Ok(decrypted_key) = crate::crypto::decrypt_encoded_key_data(&encoded_key_data, self.cfg.iterations, &salt, password.as_bytes()) {
-            return crate::crypto::validate_decrypted_key(&decrypted_key, &kek[0..32], checksum);
+        if let Ok(decrypted_key) = crate::crypto::decrypt_encoded_key_data(&encoded_key_data, master_key, master_iv) {
+            return crate::crypto::validate_decrypted_key(&decrypted_key, master_key, checksum);
         }
         
         false

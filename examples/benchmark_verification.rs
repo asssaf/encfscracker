@@ -2,12 +2,14 @@ use encfs_cracker::crypto::encfs_config::EncfSConfig;
 use std::time::Instant;
 
 fn main() {
-    let xml = r#"<config>
-    <salt>SGVsbG8=</salt>
-    <iterations>1000</iterations>
-    <keySize>32</keySize>
-    <encodedKeyData>S2V5RGF0YQ==</encodedKeyData>
-</config>"#;
+    let xml = r#"<boost_serialization>
+    <cfg>
+        <saltData>SGVsbG8=</saltData>
+        <kdfIterations>1000</kdfIterations>
+        <keySize>32</keySize>
+        <encodedKeyData>S2V5RGF0YQ==</encodedKeyData>
+    </cfg>
+</boost_serialization>"#;
     let config = EncfSConfig::from_xml(xml).unwrap();
     let password = "password";
     
