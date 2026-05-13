@@ -23,5 +23,8 @@ base64 = "0.22.1"
 ctrlc = "3.5.2"
 tempfile = "3.10.1"
 sha1 = "0.10.6"
+cbc = "0.1.2"
+generic-array = "0.14.7"
+digest = "0.10.7"
 
 [dev-dependencies]

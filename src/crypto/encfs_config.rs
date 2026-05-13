@@ -53,15 +53,15 @@ impl EncfSConfig {
             },
         };
         
+        // Extract checksum from first 4 bytes
+        let mut checksum_bytes = [0u8; 4];
+        checksum_bytes.copy_from_slice(&encoded_key_data[0..4]);
+        let checksum = u32::from_be_bytes(checksum_bytes);
+
         let kek = derive_key(password.as_bytes(), &salt, self.cfg.iterations);
-        let iv = vec![0u8; 16]; // EncFS config uses zero IV for master key
         
-        if let Ok(decrypted_key) = crate::crypto::decrypt_encoded_key_data(&kek, &iv, &encoded_key_data) {
-            println!("Decrypted key len: {}", decrypted_key.len());
-            if decrypted_key.len() >= 8 {
-                println!("Decrypted key header: {:02x?}", &decrypted_key[0..8]);
-            }
-            return crate::crypto::validate_decrypted_key(&decrypted_key);
+        if let Ok(decrypted_key) = crate::crypto::decrypt_encoded_key_data(&encoded_key_data, self.cfg.iterations, &salt, password.as_bytes()) {
+            return crate::crypto::validate_decrypted_key(&decrypted_key, &kek[0..32], checksum);
         }
         
         false
