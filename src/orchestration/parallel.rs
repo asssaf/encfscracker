@@ -33,14 +33,21 @@ impl ParallelCracker {
         })
     }
 
-    pub fn run(&self) -> anyhow::Result<()> {
+    pub fn run(&self) -> anyhow::Result<Option<String>> {
+        let start_time = std::time::Instant::now();
+        let total_attempts = Arc::new(std::sync::atomic::AtomicU64::new(0));
+        
         for k in 1..=self.config.fragments.len() {
-            println!("Generating combinations of length {}...", k);
-            let combinations: Vec<Vec<String>> = generate_combinations(&self.config.fragments, k).collect();
-            println!("Testing {} combinations...", combinations.len());
+            println!("Testing combinations of length {}...", k);
+            let combinations = generate_combinations(&self.config.fragments, k);
             
-            let found = combinations.par_iter().try_for_each(|combo| -> anyhow::Result<()> {
-                if !self.is_running.load(Ordering::SeqCst) {
+            let total_attempts_inner = total_attempts.clone();
+            let is_running = self.is_running.clone();
+            let found_password = Arc::new(Mutex::new(None));
+            let found_password_inner = found_password.clone();
+
+            combinations.par_bridge().try_for_each(|combo| -> anyhow::Result<()> {
+                if !is_running.load(Ordering::SeqCst) || found_password_inner.lock().unwrap().is_some() {
                     return Ok(());
                 }
 
@@ -51,11 +58,18 @@ impl ParallelCracker {
                 
                 let joined = combo.join("");
                 if self.config.encfs_config.verify_password(&joined) {
-                    println!("Password found: {}", joined);
-                    std::fs::write("recovered_password.txt", &joined)?;
-                    std::process::exit(0);
+                    let mut found = found_password_inner.lock().unwrap();
+                    *found = Some(joined);
+                    return Ok(());
                 }
                 
+                let current = total_attempts_inner.fetch_add(1, Ordering::SeqCst);
+                if current > 0 && current % 10000 == 0 {
+                    let elapsed = start_time.elapsed().as_secs_f64();
+                    let speed = current as f64 / elapsed;
+                    println!("Tried {} combinations... ({:.2} combinations/sec)", current, speed);
+                }
+
                 let mut buffer = self.buffer.lock().unwrap();
                 buffer.push(combo.clone());
                 
@@ -68,9 +82,12 @@ impl ParallelCracker {
                     }
                 }
                 Ok(())
-            });
+            })?;
 
-            found?;
+            let found = found_password.lock().unwrap().take();
+            if let Some(password) = found {
+                return Ok(Some(password));
+            }
             
             if !self.is_running.load(Ordering::SeqCst) {
                 break;
@@ -85,7 +102,7 @@ impl ParallelCracker {
                 self.db.mark_as_tried(&c_slice)?;
             }
         }
-        Ok(())
+        Ok(None)
     }
 }
 
@@ -115,6 +132,6 @@ mod tests {
             db_path,
         };
         let cracker = ParallelCracker::new(config).unwrap();
-        cracker.run().unwrap();
+        let _ = cracker.run().unwrap();
     }
 }

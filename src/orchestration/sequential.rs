@@ -26,13 +26,13 @@ impl SequentialCracker {
         Ok(Self { config, db, is_running })
     }
 
-    pub fn run(&self) -> anyhow::Result<()> {
+    pub fn run(&self) -> anyhow::Result<Option<String>> {
         for k in 1..=self.config.fragments.len() {
             let combinations = generate_combinations(&self.config.fragments, k);
 
             for combo in combinations {
                 if !self.is_running.load(Ordering::SeqCst) {
-                    return Ok(());
+                    return Ok(None);
                 }
 
                 let combo_slice: Vec<&str> = combo.iter().map(|s| s.as_str()).collect();
@@ -42,15 +42,13 @@ impl SequentialCracker {
 
                 let joined = combo.join("");
                 if self.config.encfs_config.verify_password(&joined) {
-                    println!("Password found: {}", joined);
-                    std::fs::write("recovered_password.txt", &joined)?;
-                    std::process::exit(0);
+                    return Ok(Some(joined));
                 }
 
                 self.db.mark_as_tried(&combo_slice)?;
             }
         }
-        Ok(())
+        Ok(None)
     }
 }
 
@@ -81,6 +79,6 @@ mod tests {
             db_path,
         };
         let cracker = SequentialCracker::new(config).unwrap();
-        cracker.run().unwrap();
+        let _ = cracker.run().unwrap();
     }
 }

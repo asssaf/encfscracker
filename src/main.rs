@@ -39,7 +39,12 @@ fn main() -> anyhow::Result<()> {
     };
     
     let cracker = ParallelCracker::new(config)?;
-    cracker.run()?;
+    if let Some(password) = cracker.run()? {
+        println!("Password found: {}", password);
+        std::fs::write("recovered_password.txt", &password)?;
+    } else {
+        println!("No password found.");
+    }
 
     Ok(())
 }
