@@ -74,3 +74,6 @@ Goal: Connect the orchestration logic to the `clap` CLI and perform final testin
         - Create a test EncfS volume with a known password made of specific fragments.
         - Add an integration test in `tests/integration_cracker_test.rs` that runs the full tool and verifies the output.
 - [x] Task: Conductor - User Manual Verification 'Phase 4: CLI Integration & Final Polish' (Protocol in workflow.md) d093ffa
+
+## Phase: Review Fixes
+- [x] Task: Apply review suggestions 0c2dc0b
