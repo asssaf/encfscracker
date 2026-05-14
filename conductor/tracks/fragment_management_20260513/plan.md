@@ -3,8 +3,8 @@
 This plan outlines the steps to implement a group-aware fragment management system using Sled.
 
 ## Phase 1: Data Model and Persistence
-- [ ] Task: Define the data structures for Fragments and Groups in `src/state/mod.rs`.
-- [ ] Task: Implement Sled storage logic for adding, retrieving, and clearing fragments/groups.
+- [x] Task: Define the data structures for Fragments and Groups in `src/state/mod.rs`. 6dc6756
+- [~] Task: Implement Sled storage logic for adding, retrieving, and clearing fragments/groups.
 - [ ] Task: Write unit tests for fragment persistence.
 - [ ] Task: Conductor - User Manual Verification 'Phase 1: Data Model and Persistence' (Protocol in workflow.md)
 
