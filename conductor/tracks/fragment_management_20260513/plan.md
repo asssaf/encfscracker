@@ -10,10 +10,10 @@ This plan outlines the steps to implement a group-aware fragment management syst
 
 ## Phase 2: CLI Management Commands
 - [x] Task: Update CLI arguments in `src/main.rs` to support `--add-fragment`, `--group`, and `--import-file`. 6633f95
-- [~] Task: Implement the `list-fragments` command logic.
-- [ ] Task: Implement the `clear-fragments` command logic.
-- [ ] Task: Write integration tests for fragment CLI commands.
-- [ ] Task: Conductor - User Manual Verification 'Phase 2: CLI Management Commands' (Protocol in workflow.md)
+- [x] Task: Implement the `list-fragments` command logic. bf44960
+- [x] Task: Implement the `clear-fragments` command logic. bf44960
+- [x] Task: Write integration tests for fragment CLI commands. 327119d
+- [~] Task: Conductor - User Manual Verification 'Phase 2: CLI Management Commands' (Protocol in workflow.md)
 
 ## Phase 3: Group-Aware Combination Engine
 - [ ] Task: Refactor `src/fragment_combination/mod.rs` to accept fragments with group IDs.
