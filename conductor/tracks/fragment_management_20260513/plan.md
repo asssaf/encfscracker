@@ -8,12 +8,12 @@ This plan outlines the steps to implement a group-aware fragment management syst
 - [x] Task: Write unit tests for fragment persistence. ba97a61
 - [x] Task: Conductor - User Manual Verification 'Phase 1: Data Model and Persistence' (Protocol in workflow.md)
 
-## Phase 2: CLI Management Commands
+## Phase 2: CLI Management Commands [checkpoint: e6e9248]
 - [x] Task: Update CLI arguments in `src/main.rs` to support `--add-fragment`, `--group`, and `--import-file`. 6633f95
 - [x] Task: Implement the `list-fragments` command logic. bf44960
 - [x] Task: Implement the `clear-fragments` command logic. bf44960
 - [x] Task: Write integration tests for fragment CLI commands. 327119d
-- [~] Task: Conductor - User Manual Verification 'Phase 2: CLI Management Commands' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 2: CLI Management Commands' (Protocol in workflow.md)
 
 ## Phase 3: Group-Aware Combination Engine
 - [ ] Task: Refactor `src/fragment_combination/mod.rs` to accept fragments with group IDs.
