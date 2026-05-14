@@ -4,7 +4,5 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
----
-
 - [x] **Track: Actual EncfS Key Verification**
 *Link: [./tracks/encfs_verification_20260511/](./tracks/encfs_verification_20260511/)*
