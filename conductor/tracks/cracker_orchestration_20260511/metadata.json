@@ -1,8 +1,0 @@
-{
-  "track_id": "cracker_orchestration_20260511",
-  "type": "feature",
-  "status": "new",
-  "created_at": "2026-05-11T13:00:00Z",
-  "updated_at": "2026-05-11T13:00:00Z",
-  "description": "Orchestrate the combination generation, state tracking, and verification into a working cracker."
-}
