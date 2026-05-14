@@ -7,6 +7,10 @@ use crate::crypto::derive_key;
 #[serde(rename = "boost_serialization")]
 pub struct EncfSConfig {
     pub cfg: ConfigInner,
+    #[serde(skip)]
+    pub salt_cache: std::sync::OnceLock<Vec<u8>>,
+    #[serde(skip)]
+    pub key_data_cache: std::sync::OnceLock<Vec<u8>>,
 }
 
 #[derive(Debug, Deserialize)]
@@ -27,14 +31,24 @@ impl EncfSConfig {
         Ok(config)
     }
 
-    pub fn salt_bytes(&self) -> anyhow::Result<Vec<u8>> {
+    pub fn salt_bytes(&self) -> anyhow::Result<&[u8]> {
+        if let Some(bytes) = self.salt_cache.get() {
+            return Ok(bytes.as_slice());
+        }
         let cleaned = self.cfg.salt_data.replace(|c: char| c.is_whitespace(), "");
-        Ok(general_purpose::STANDARD.decode(&cleaned)?)
+        let decoded = general_purpose::STANDARD.decode(&cleaned)?;
+        let _ = self.salt_cache.set(decoded);
+        Ok(self.salt_cache.get().unwrap().as_slice())
     }
 
-    pub fn encoded_key_data_bytes(&self) -> anyhow::Result<Vec<u8>> {
+    pub fn encoded_key_data_bytes(&self) -> anyhow::Result<&[u8]> {
+        if let Some(bytes) = self.key_data_cache.get() {
+            return Ok(bytes.as_slice());
+        }
         let cleaned = self.cfg.encoded_key_data.replace(|c: char| c.is_whitespace(), "");
-        Ok(general_purpose::STANDARD.decode(&cleaned)?)
+        let decoded = general_purpose::STANDARD.decode(&cleaned)?;
+        let _ = self.key_data_cache.set(decoded);
+        Ok(self.key_data_cache.get().unwrap().as_slice())
     }
 
     pub fn verify_password(&self, password: &str) -> bool {
@@ -54,11 +68,14 @@ impl EncfSConfig {
         };
         
         // Extract checksum from first 4 bytes
+        if encoded_key_data.len() < 4 {
+            return false;
+        }
         let mut checksum_bytes = [0u8; 4];
         checksum_bytes.copy_from_slice(&encoded_key_data[0..4]);
         let checksum = u32::from_be_bytes(checksum_bytes);
 
-        let kek = derive_key(password.as_bytes(), &salt, self.cfg.iterations);
+        let kek = derive_key(password.as_bytes(), salt, self.cfg.iterations);
         let master_key = &kek[0..32];
         let master_iv = &kek[32..48];
         

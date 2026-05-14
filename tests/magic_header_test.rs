@@ -1,6 +1,5 @@
 use encfs_cracker::crypto::{validate_decrypted_key, HmacSha1};
-use hmac::{Hmac, Mac};
-use sha1::Sha1;
+use hmac::Mac;
 
 // Helper to calculate checksum for testing purposes
 fn calculate_checksum(decrypted_data: &[u8], master_key: &[u8]) -> u32 {

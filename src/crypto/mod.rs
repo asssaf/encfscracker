@@ -6,7 +6,6 @@ use cfb_mode::Decryptor;
 // Import AsyncStreamCipher for decrypt method
 use aes::cipher::{KeyIvInit, AsyncStreamCipher}; 
 use anyhow::{anyhow, Result};
-use digest::Digest; // Import Digest trait
 
 // Declare the encfs_config module as public and re-export EncfSConfig publicly
 pub mod encfs_config; // Make the module public
