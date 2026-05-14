@@ -4,9 +4,9 @@ This plan outlines the steps to implement a group-aware fragment management syst
 
 ## Phase 1: Data Model and Persistence
 - [x] Task: Define the data structures for Fragments and Groups in `src/state/mod.rs`. 6dc6756
-- [~] Task: Implement Sled storage logic for adding, retrieving, and clearing fragments/groups.
-- [ ] Task: Write unit tests for fragment persistence.
-- [ ] Task: Conductor - User Manual Verification 'Phase 1: Data Model and Persistence' (Protocol in workflow.md)
+- [x] Task: Implement Sled storage logic for adding, retrieving, and clearing fragments/groups. 89825cf
+- [x] Task: Write unit tests for fragment persistence. ba97a61
+- [~] Task: Conductor - User Manual Verification 'Phase 1: Data Model and Persistence' (Protocol in workflow.md)
 
 ## Phase 2: CLI Management Commands
 - [ ] Task: Update CLI arguments in `src/main.rs` to support `--add-fragment`, `--group`, and `--import-file`.
