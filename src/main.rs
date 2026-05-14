@@ -8,13 +8,28 @@ use encfs_cracker::orchestration::parallel::ParallelCracker;
 #[command(author, version, about, long_about = None)]
 struct Args {
     #[arg(short, long)]
-    config: PathBuf,
+    config: Option<PathBuf>,
 
     #[arg(short, long, value_delimiter = ',')]
     fragments: Vec<String>,
 
     #[arg(long, default_value_t = false)]
     reset_state: bool,
+
+    #[arg(long)]
+    add_fragment: Option<String>,
+
+    #[arg(long)]
+    group: Option<String>,
+
+    #[arg(long)]
+    import_file: Option<PathBuf>,
+
+    #[arg(long, default_value_t = false)]
+    list_fragments: bool,
+
+    #[arg(long, default_value_t = false)]
+    clear_fragments: bool,
 }
 
 fn main() -> anyhow::Result<()> {
@@ -22,18 +37,63 @@ fn main() -> anyhow::Result<()> {
     
     // Initialize state database
     let db_path = PathBuf::from("cracker_state.db");
+    let db = encfs_cracker::state::sled_db::SledDb::open(&db_path)?;
     
     if args.reset_state {
-        let db = encfs_cracker::state::sled_db::SledDb::open(&db_path)?;
         db.reset_state()?;
         println!("State reset successfully.");
     }
 
-    let xml = std::fs::read_to_string(args.config)?;
+    if let Some(text) = args.add_fragment {
+        let fragment = encfs_cracker::state::Fragment {
+            text,
+            group_id: args.group,
+        };
+        db.add_fragment(&fragment)?;
+        println!("Fragment added successfully.");
+        return Ok(());
+    }
+
+    if let Some(path) = args.import_file {
+        let content = std::fs::read_to_string(path)?;
+        for line in content.lines() {
+            let line = line.trim();
+            if !line.is_empty() {
+                let fragment = encfs_cracker::state::Fragment {
+                    text: line.to_string(),
+                    group_id: args.group.clone(),
+                };
+                db.add_fragment(&fragment)?;
+            }
+        }
+        println!("Fragments imported successfully.");
+        return Ok(());
+    }
+
+    if args.list_fragments {
+        // Task 2 implementation goes here
+        return Ok(());
+    }
+
+    if args.clear_fragments {
+        // Task 3 implementation goes here
+        return Ok(());
+    }
+
+    // Default behavior: Crack
+    let config_path = args.config.ok_or_else(|| anyhow::anyhow!("Config file is required for cracking"))?;
+    let xml = std::fs::read_to_string(config_path)?;
     let encfs_config = EncfSConfig::from_xml(&xml)?;
     
+    // Merge command line fragments with DB fragments
+    let mut fragments = args.fragments;
+    let db_fragments = db.list_fragments()?;
+    for f in db_fragments {
+        fragments.push(f.text);
+    }
+    
     let config = CrackerConfig {
-        fragments: args.fragments,
+        fragments,
         encfs_config,
         db_path,
     };
