@@ -16,6 +16,8 @@ fn test_end_to_end_cracker() {
 </boost_serialization>"#;
     fs::write(&config_path, config_content).unwrap();
     
+    let db_path = dir.path().join("cracker_state.db");
+    
     // We don't have a real encfs password to crack, so just run the tool
     // and verify it completes without crashing.
     let output = Command::new("cargo")
@@ -25,8 +27,14 @@ fn test_end_to_end_cracker() {
         .arg(config_path)
         .arg("--fragments")
         .arg("a,b,c")
+        .arg("--db-path")
+        .arg(db_path)
         .output()
         .expect("Failed to execute command");
 
+    if !output.status.success() {
+        eprintln!("STDOUT: {}", String::from_utf8_lossy(&output.stdout));
+        eprintln!("STDERR: {}", String::from_utf8_lossy(&output.stderr));
+    }
     assert!(output.status.success(), "Cracker should run successfully");
 }

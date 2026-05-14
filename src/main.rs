@@ -104,6 +104,7 @@ fn main() -> anyhow::Result<()> {
     for f in db_fragments {
         fragments.push(f.text);
     }
+    drop(db);
     
     let config = CrackerConfig {
         fragments,
