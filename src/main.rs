@@ -16,6 +16,9 @@ struct Args {
     #[arg(long, default_value_t = false)]
     reset_state: bool,
 
+    #[arg(long, default_value = "cracker_state.db")]
+    db_path: PathBuf,
+
     #[arg(long)]
     add_fragment: Option<String>,
 
@@ -36,7 +39,7 @@ fn main() -> anyhow::Result<()> {
     let args = Args::parse();
     
     // Initialize state database
-    let db_path = PathBuf::from("cracker_state.db");
+    let db_path = args.db_path.clone();
     let db = encfs_cracker::state::sled_db::SledDb::open(&db_path)?;
     
     if args.reset_state {
@@ -71,12 +74,22 @@ fn main() -> anyhow::Result<()> {
     }
 
     if args.list_fragments {
-        // Task 2 implementation goes here
+        let fragments = db.list_fragments()?;
+        if fragments.is_empty() {
+            println!("No fragments found.");
+        } else {
+            println!("Fragments:");
+            for f in fragments {
+                let group = f.group_id.unwrap_or_else(|| "none".to_string());
+                println!("  - {}: (group: {})", f.text, group);
+            }
+        }
         return Ok(());
     }
 
     if args.clear_fragments {
-        // Task 3 implementation goes here
+        db.clear_fragments()?;
+        println!("All fragments cleared.");
         return Ok(());
     }
 
