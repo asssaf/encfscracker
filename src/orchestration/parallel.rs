@@ -1,6 +1,7 @@
 use crate::config::CrackerConfig;
 use crate::fragment_combination::generate_combinations;
 use crate::state::sled_db::SledDb;
+use crate::state::Fragment;
 use rayon::prelude::*;
 use std::sync::{Arc, Mutex};
 use std::sync::atomic::{AtomicBool, Ordering};
@@ -8,7 +9,7 @@ use std::sync::atomic::{AtomicBool, Ordering};
 pub struct ParallelCracker {
     config: Arc<CrackerConfig>,
     db: Arc<SledDb>,
-    buffer: Arc<Mutex<Vec<Vec<String>>>>,
+    buffer: Arc<Mutex<Vec<Vec<Fragment>>>>,
     is_running: Arc<AtomicBool>,
 }
 
@@ -51,12 +52,12 @@ impl ParallelCracker {
                     return Ok(());
                 }
 
-                let combo_slice: Vec<&str> = combo.iter().map(|s| s.as_str()).collect();
+                let combo_slice: Vec<&str> = combo.iter().map(|s| s.text.as_str()).collect();
                 if self.db.is_tried(&combo_slice)? {
                     return Ok(());
                 }
                 
-                let joined = combo.join("");
+                let joined: String = combo.iter().map(|f| f.text.as_str()).collect();
                 if self.config.encfs_config.verify_password(&joined) {
                     let mut found = found_password_inner.lock().unwrap();
                     *found = Some(joined);
@@ -74,10 +75,10 @@ impl ParallelCracker {
                 buffer.push(combo.clone());
                 
                 if buffer.len() >= 1000 {
-                    let batch: Vec<Vec<String>> = buffer.drain(..).collect();
+                    let batch: Vec<Vec<Fragment>> = buffer.drain(..).collect();
                     drop(buffer);
                     for c in batch {
-                        let c_slice: Vec<&str> = c.iter().map(|s| s.as_str()).collect();
+                        let c_slice: Vec<&str> = c.iter().map(|s| s.text.as_str()).collect();
                         self.db.mark_as_tried(&c_slice)?;
                     }
                 }
@@ -95,10 +96,10 @@ impl ParallelCracker {
             
             // Flush remaining buffer
             let mut buffer = self.buffer.lock().unwrap();
-            let batch: Vec<Vec<String>> = buffer.drain(..).collect();
+            let batch: Vec<Vec<Fragment>> = buffer.drain(..).collect();
             drop(buffer);
             for c in batch {
-                let c_slice: Vec<&str> = c.iter().map(|s| s.as_str()).collect();
+                let c_slice: Vec<&str> = c.iter().map(|s| s.text.as_str()).collect();
                 self.db.mark_as_tried(&c_slice)?;
             }
         }
@@ -127,7 +128,10 @@ mod tests {
 </boost_serialization>"#;
         let encfs_config = EncfSConfig::from_xml(xml).unwrap();
         let config = CrackerConfig {
-            fragments: vec!["a".to_string(), "b".to_string()],
+            fragments: vec![
+                Fragment { text: "a".to_string(), group_id: None },
+                Fragment { text: "b".to_string(), group_id: None }
+            ],
             encfs_config,
             db_path,
         };

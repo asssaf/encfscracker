@@ -1,6 +1,7 @@
 use crate::config::CrackerConfig;
 use crate::fragment_combination::generate_combinations;
 use crate::state::sled_db::SledDb;
+use crate::state::Fragment;
 use std::sync::Arc;
 use std::sync::atomic::{AtomicBool, Ordering};
 
@@ -35,12 +36,12 @@ impl SequentialCracker {
                     return Ok(None);
                 }
 
-                let combo_slice: Vec<&str> = combo.iter().map(|s| s.as_str()).collect();
+                let combo_slice: Vec<&str> = combo.iter().map(|s| s.text.as_str()).collect();
                 if self.db.is_tried(&combo_slice)? {
                     continue;
                 }
 
-                let joined = combo.join("");
+                let joined: String = combo.iter().map(|f| f.text.as_str()).collect();
                 if self.config.encfs_config.verify_password(&joined) {
                     return Ok(Some(joined));
                 }
@@ -74,7 +75,10 @@ mod tests {
         println!("XML: {}", xml);
         let encfs_config = EncfSConfig::from_xml(xml).unwrap();
         let config = CrackerConfig {
-            fragments: vec!["a".to_string(), "b".to_string()],
+            fragments: vec![
+                Fragment { text: "a".to_string(), group_id: None },
+                Fragment { text: "b".to_string(), group_id: None }
+            ],
             encfs_config,
             db_path,
         };

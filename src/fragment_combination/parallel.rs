@@ -5,7 +5,7 @@ use crate::state::sled_db::SledDb;
 
 pub fn parallel_combination_test<T, F>(fragments: &[T], k: usize, validator: F, db: Option<&SledDb>) -> bool 
 where 
-    T: Clone + Send + Sync + 'static + AsRef<str> + std::fmt::Debug,
+    T: crate::fragment_combination::Groupable + Clone + Send + Sync + 'static + AsRef<str> + std::fmt::Debug,
     F: Fn(&[T]) -> bool + Send + Sync 
 {
     let skip_count = if let Some(db) = db {

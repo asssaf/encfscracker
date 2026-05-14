@@ -30,7 +30,7 @@ impl EncfsConfig {
 }
 
 pub struct CrackerConfig {
-    pub fragments: Vec<String>,
+    pub fragments: Vec<crate::state::Fragment>,
     pub encfs_config: EncfSConfig,
     pub db_path: PathBuf,
 }

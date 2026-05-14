@@ -14,7 +14,7 @@ fn test_parallel_combination_skips_tried() {
     db.reset_state().unwrap();
     db.save_checkpoint("0").unwrap();
 
-    let fragments = vec!["a", "b", "c"];
+    let fragments = vec!["a".to_string(), "b".to_string(), "c".to_string()];
     let k = 2;
     
     // Mark "a", "b" as tried
@@ -23,10 +23,10 @@ fn test_parallel_combination_skips_tried() {
     let call_count = Arc::new(AtomicUsize::new(0));
     let call_count_clone = Arc::clone(&call_count);
     
-    let validator = move |c: &[&str]| {
+    let validator = move |c: &[String]| {
         call_count_clone.fetch_add(1, Ordering::SeqCst);
         // If we see "a", "b", something is wrong
-        if c == &["a", "b"] {
+        if c == &["a".to_string(), "b".to_string()] {
             panic!("Validator should NOT be called for tried combination ['a', 'b']");
         }
         false
@@ -50,7 +50,7 @@ fn test_parallel_combination_resume_from_checkpoint() {
     db.reset_state().unwrap();
     db.save_checkpoint("0").unwrap();
 
-    let fragments = vec!["a", "b", "c"];
+    let fragments = vec!["a".to_string(), "b".to_string(), "c".to_string()];
     let k = 2;
     
     // Save checkpoint: skip first 3 combinations
@@ -60,11 +60,11 @@ fn test_parallel_combination_resume_from_checkpoint() {
     let call_count = Arc::new(AtomicUsize::new(0));
     let call_count_clone = Arc::clone(&call_count);
     
-    let validator = move |c: &[&str]| {
+    let validator = move |c: &[String]| {
         call_count_clone.fetch_add(1, Ordering::SeqCst);
         // We should only see (b,c), (c,a), (c,b)
         // Check if we see any of the first 3
-        if c == &["a", "b"] || c == &["a", "c"] || c == &["b", "a"] {
+        if c == &["a".to_string(), "b".to_string()] || c == &["a".to_string(), "c".to_string()] || c == &["b".to_string(), "a".to_string()] {
             panic!("Validator should NOT be called for checkpointed combinations {:?}", c);
         }
         false

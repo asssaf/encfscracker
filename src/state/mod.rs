@@ -11,6 +11,12 @@ pub struct Fragment {
     pub group_id: Option<String>,
 }
 
+impl AsRef<str> for Fragment {
+    fn as_ref(&self) -> &str {
+        &self.text
+    }
+}
+
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct FragmentGroup {
     pub id: String,
