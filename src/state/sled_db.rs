@@ -6,6 +6,8 @@ static INSTANCE: OnceCell<SledDb> = OnceCell::new();
 
 pub const TREE_TRIED_COMBINATIONS: &str = "tried_combinations";
 pub const TREE_PROGRESS: &str = "progress";
+pub const TREE_FRAGMENTS: &str = "fragments";
+pub const TREE_GROUPS: &str = "groups";
 pub const KEY_CURRENT_CHECKPOINT: &str = "current_checkpoint";
 
 pub struct SledDb {
@@ -32,6 +34,60 @@ impl SledDb {
 
     pub fn progress_tree(&self) -> anyhow::Result<Tree> {
         Ok(self.db.open_tree(TREE_PROGRESS)?)
+    }
+
+    pub fn fragments_tree(&self) -> anyhow::Result<Tree> {
+        Ok(self.db.open_tree(TREE_FRAGMENTS)?)
+    }
+
+    pub fn groups_tree(&self) -> anyhow::Result<Tree> {
+        Ok(self.db.open_tree(TREE_GROUPS)?)
+    }
+
+    pub fn add_fragment(&self, fragment: &crate::state::Fragment) -> anyhow::Result<()> {
+        let tree = self.fragments_tree()?;
+        let value = serde_json::to_vec(fragment)?;
+        tree.insert(&fragment.text, value)?;
+        Ok(())
+    }
+
+    pub fn list_fragments(&self) -> anyhow::Result<Vec<crate::state::Fragment>> {
+        let tree = self.fragments_tree()?;
+        let mut fragments = Vec::new();
+        for item in tree.iter() {
+            let (_, v) = item?;
+            let fragment: crate::state::Fragment = serde_json::from_slice(&v)?;
+            fragments.push(fragment);
+        }
+        Ok(fragments)
+    }
+
+    pub fn clear_fragments(&self) -> anyhow::Result<()> {
+        self.fragments_tree()?.clear()?;
+        Ok(())
+    }
+
+    pub fn add_group(&self, group: &crate::state::FragmentGroup) -> anyhow::Result<()> {
+        let tree = self.groups_tree()?;
+        let value = serde_json::to_vec(group)?;
+        tree.insert(&group.id, value)?;
+        Ok(())
+    }
+
+    pub fn list_groups(&self) -> anyhow::Result<Vec<crate::state::FragmentGroup>> {
+        let tree = self.groups_tree()?;
+        let mut groups = Vec::new();
+        for item in tree.iter() {
+            let (_, v) = item?;
+            let group: crate::state::FragmentGroup = serde_json::from_slice(&v)?;
+            groups.push(group);
+        }
+        Ok(groups)
+    }
+
+    pub fn clear_groups(&self) -> anyhow::Result<()> {
+        self.groups_tree()?.clear()?;
+        Ok(())
     }
 
     pub fn mark_as_tried(&self, combination: &[&str]) -> anyhow::Result<()> {
