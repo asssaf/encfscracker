@@ -6,7 +6,7 @@
 ## Frameworks & Libraries
 - **CLI Framework:** `clap` - The standard crate for building robust and user-friendly command-line interfaces in Rust, providing powerful argument parsing and help generation.
 - **Cryptography:** `RustCrypto` - A collection of pure-Rust, secure, and audited cryptographic algorithms for handling EncfS key derivation and encryption at rest.
-- **State Management:** `sled` - A high-performance, embedded key-value store (modern successor to LevelDB) used for persistent tracking of tried password combinations.
+- **State Management:** `sled` - A high-performance, embedded key-value store (modern successor to LevelDB) used for persistent tracking of tried password combinations and fragment group assignments.
 - **EncfS Integration:** Custom implementation using `RustCrypto` to parse `.encfs6.xml` files and perform key derivation checks.
 
 ## Data Storage

@@ -21,7 +21,7 @@ A high-performance CLI tool designed to recover EncfS keys by intelligently comb
 
 ## Key Features
 - **EncfS Compatibility:** Robust parsing and support for standard EncfS configuration files.
-- **Fragment Management:** Flexible input system for defining password fragments (e.g., words, numbers, patterns).
+- **Fragment Management & Groups:** Flexible input system for defining password fragments, with support for logical groups to enforce constraints (e.g., "at most one fragment from this group per password").
 - **Resume Support:** Integrated state management to track progress and prevent redundant testing.
 - **High-Performance Engine:** Optimized cracking logic designed for speed and multi-core utilization.
 - **Standard CLI Interface:** A professional command-line interface with clear flags, arguments, and progress reporting.
