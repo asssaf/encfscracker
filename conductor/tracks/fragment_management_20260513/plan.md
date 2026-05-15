@@ -15,12 +15,12 @@ This plan outlines the steps to implement a group-aware fragment management syst
 - [x] Task: Write integration tests for fragment CLI commands. 327119d
 - [x] Task: Conductor - User Manual Verification 'Phase 2: CLI Management Commands' (Protocol in workflow.md)
 
-## Phase 3: Group-Aware Combination Engine
+## Phase 3: Group-Aware Combination Engine [checkpoint: f822579]
 - [x] Task: Refactor `src/fragment_combination/mod.rs` to accept fragments with group IDs. b912514
 - [x] Task: Implement the constraint logic: filter combinations to ensure max one fragment per group. b912514
 - [x] Task: Update the parallel and sequential crackers to use the new constrained generator. b912514
 - [x] Task: Write unit tests verifying that combinations respect group boundaries. b912514
-- [~] Task: Conductor - User Manual Verification 'Phase 3: Group-Aware Combination Engine' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 3: Group-Aware Combination Engine' (Protocol in workflow.md)
 
 ## Phase 4: Integration and Benchmarking
 - [ ] Task: Perform an end-to-end test with a real EncfS config and grouped fragments.
