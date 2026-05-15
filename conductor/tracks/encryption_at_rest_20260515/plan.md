@@ -12,11 +12,11 @@ Implement authenticated encryption (AES-256-GCM) for the persistent state databa
 **Goal:** Implement the core cryptographic logic for key derivation and data encryption.
 
 - [x] Task: Add dependencies to `Cargo.toml` (`argon2`, `rand`, `rpassword`). 47fad33
-- [ ] Task: Implement `CryptoManager` module in `src/crypto/mod.rs` (or `src/crypto/state_encryption.rs`).
-    - [ ] Task: TDD - Write tests for Argon2id key derivation.
-    - [ ] Task: Implement `derive_key(password: &str, salt: &[u8]) -> [u8; 32]`.
-    - [ ] Task: TDD - Write tests for AES-256-GCM encryption/decryption.
-    - [ ] Task: Implement `encrypt(data: &[u8], key: &[u8]) -> Vec<u8>` and `decrypt(data: &[u8], key: &[u8]) -> anyhow::Result<Vec<u8>>`.
+- [x] Task: Implement `CryptoManager` module in `src/crypto/mod.rs` (or `src/crypto/state_encryption.rs`). 624cd13
+    - [x] Task: TDD - Write tests for Argon2id key derivation.
+    - [x] Task: Implement `derive_key(password: &str, salt: &[u8]) -> [u8; 32]`.
+    - [x] Task: TDD - Write tests for AES-256-GCM encryption/decryption.
+    - [x] Task: Implement `encrypt(data: &[u8], key: &[u8]) -> Vec<u8>` and `decrypt(data: &[u8], key: &[u8]) -> anyhow::Result<Vec<u8>>`.
 - [ ] Task: Conductor - User Manual Verification 'Phase 1' (Protocol in workflow.md)
 
 ## Phase 2: Encrypted State Management (Sled Integration)
