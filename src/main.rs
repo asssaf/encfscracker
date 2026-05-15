@@ -34,6 +34,9 @@ struct Args {
 
     #[arg(long, default_value_t = false)]
     clear_fragments: bool,
+
+    #[arg(long, env = "STATE_PASSWORD")]
+    password: Option<String>,
 }
 
 fn main() -> anyhow::Result<()> {
@@ -45,17 +48,25 @@ fn main() -> anyhow::Result<()> {
 
     // Handle encryption initialization or unlocking
     let prompt = encfs_cracker::cli_utils::RPasswordPrompt;
-    if db.needs_initialization()? {
+    
+    let password = if let Some(p) = args.password {
+        p
+    } else if db.needs_initialization()? {
         println!("New state database detected. Please set a master password for encryption at rest.");
         let pass1 = prompt.prompt("Enter new master password: ")?;
         let pass2 = prompt.prompt("Confirm master password: ")?;
         if pass1 != pass2 {
             return Err(anyhow::anyhow!("Passwords do not match."));
         }
-        db.initialize_encryption(&pass1)?;
+        pass1
+    } else {
+        prompt.prompt("Enter master password to unlock state: ")?
+    };
+
+    if db.needs_initialization()? {
+        db.initialize_encryption(&password)?;
         println!("Encryption initialized successfully.");
     } else {
-        let password = prompt.prompt("Enter master password to unlock state: ")?;
         db.unlock(&password)?;
     }
     

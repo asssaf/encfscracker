@@ -21,6 +21,7 @@ fn test_end_to_end_cracker() {
     // We don't have a real encfs password to crack, so just run the tool
     // and verify it completes without crashing.
     let output = Command::new("cargo")
+        .env("STATE_PASSWORD", "testpass")
         .arg("run")
         .arg("--")
         .arg("--config")
@@ -57,6 +58,7 @@ fn test_end_to_end_cracker_with_groups() {
     
     // 1. Add fragments with groups
     Command::new("cargo")
+        .env("STATE_PASSWORD", "testpass")
         .arg("run")
         .arg("--")
         .arg("--db-path")
@@ -68,6 +70,7 @@ fn test_end_to_end_cracker_with_groups() {
         .output().unwrap();
         
     Command::new("cargo")
+        .env("STATE_PASSWORD", "testpass")
         .arg("run")
         .arg("--")
         .arg("--db-path")
@@ -80,6 +83,7 @@ fn test_end_to_end_cracker_with_groups() {
 
     // 2. Run cracker
     let output = Command::new("cargo")
+        .env("STATE_PASSWORD", "testpass")
         .arg("run")
         .arg("--")
         .arg("--config")

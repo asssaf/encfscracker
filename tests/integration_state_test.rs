@@ -9,6 +9,7 @@ fn test_parallel_combination_skips_tried() {
     let dir = tempdir().unwrap();
     let db_path = dir.path().join("integration_test_db");
     let db = SledDb::open(&db_path).expect("Failed to open DB");
+    db.initialize_encryption("test").unwrap();
     
     // Clear trees for a fresh test
     db.reset_state().unwrap();
@@ -45,6 +46,7 @@ fn test_parallel_combination_resume_from_checkpoint() {
     let dir = tempdir().unwrap();
     let db_path = dir.path().join("resume_test_db");
     let db = SledDb::open(&db_path).expect("Failed to open DB");
+    db.initialize_encryption("test").unwrap();
     
     // Clear trees for a fresh test
     db.reset_state().unwrap();

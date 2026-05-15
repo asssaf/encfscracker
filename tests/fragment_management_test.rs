@@ -7,6 +7,7 @@ fn test_fragment_creation_and_persistence() {
     let dir = tempdir().unwrap();
     let db_path = dir.path().join("fragment_test_db");
     let db = SledDb::open(&db_path).expect("Failed to open DB");
+    db.initialize_encryption("test").unwrap();
     
     let fragment = Fragment {
         text: "secret".to_string(),
@@ -27,6 +28,7 @@ fn test_group_persistence() {
     let dir = tempdir().unwrap();
     let db_path = dir.path().join("group_test_db");
     let db = SledDb::open(&db_path).expect("Failed to open DB");
+    db.initialize_encryption("test").unwrap();
     
     let group = FragmentGroup {
         id: "B".to_string(),
@@ -46,6 +48,7 @@ fn test_clear_fragments_and_groups() {
     let dir = tempdir().unwrap();
     let db_path = dir.path().join("clear_test_db");
     let db = SledDb::open(&db_path).expect("Failed to open DB");
+    db.initialize_encryption("test").unwrap();
     
     db.add_fragment(&Fragment {
         text: "f1".to_string(),

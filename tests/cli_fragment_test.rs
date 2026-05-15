@@ -9,6 +9,7 @@ fn test_cli_add_fragment() {
     fs::write(&config_path, "<dummy></dummy>").unwrap();
 
     let output = Command::new("cargo")
+        .env("STATE_PASSWORD", "testpass")
         .arg("run")
         .arg("--")
         .arg("--config")
@@ -31,6 +32,7 @@ fn test_cli_management_flow() {
     
     // 1. Add fragment
     let output = Command::new("cargo")
+        .env("STATE_PASSWORD", "testpass")
         .arg("run")
         .arg("--")
         .arg("--db-path")
@@ -45,6 +47,7 @@ fn test_cli_management_flow() {
 
     // 2. List fragments
     let output = Command::new("cargo")
+        .env("STATE_PASSWORD", "testpass")
         .arg("run")
         .arg("--")
         .arg("--db-path")
@@ -59,6 +62,7 @@ fn test_cli_management_flow() {
 
     // 3. Clear fragments
     let output = Command::new("cargo")
+        .env("STATE_PASSWORD", "testpass")
         .arg("run")
         .arg("--")
         .arg("--db-path")
@@ -70,6 +74,7 @@ fn test_cli_management_flow() {
 
     // 4. List again (should be empty)
     let output = Command::new("cargo")
+        .env("STATE_PASSWORD", "testpass")
         .arg("run")
         .arg("--")
         .arg("--db-path")
