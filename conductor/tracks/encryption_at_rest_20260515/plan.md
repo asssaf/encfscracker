@@ -8,7 +8,7 @@ Implement authenticated encryption (AES-256-GCM) for the persistent state databa
 - `src/main.rs`: CLI entry point for password prompting and initialization.
 - `Cargo.toml`: Add dependencies for `argon2`, `rand`, and `rpassword`.
 
-## Phase 1: Cryptographic Infrastructure & KDF
+## Phase 1: Cryptographic Infrastructure & KDF [checkpoint: 80ac40b]
 **Goal:** Implement the core cryptographic logic for key derivation and data encryption.
 
 - [x] Task: Add dependencies to `Cargo.toml` (`argon2`, `rand`, `rpassword`). 47fad33
