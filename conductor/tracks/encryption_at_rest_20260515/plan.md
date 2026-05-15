@@ -19,7 +19,7 @@ Implement authenticated encryption (AES-256-GCM) for the persistent state databa
     - [x] Task: Implement `encrypt(data: &[u8], key: &[u8]) -> Vec<u8>` and `decrypt(data: &[u8], key: &[u8]) -> anyhow::Result<Vec<u8>>`.
 - [ ] Task: Conductor - User Manual Verification 'Phase 1' (Protocol in workflow.md)
 
-## Phase 2: Encrypted State Management (Sled Integration)
+## Phase 2: Encrypted State Management (Sled Integration) [checkpoint: 4ce80f1]
 **Goal:** Refactor `SledDb` to use the `CryptoManager` for all sensitive storage operations.
 
 - [x] Task: Add `config` tree to `SledDb` constants. 01ef321
