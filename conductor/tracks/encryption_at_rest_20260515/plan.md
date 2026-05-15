@@ -22,15 +22,15 @@ Implement authenticated encryption (AES-256-GCM) for the persistent state databa
 ## Phase 2: Encrypted State Management (Sled Integration)
 **Goal:** Refactor `SledDb` to use the `CryptoManager` for all sensitive storage operations.
 
-- [ ] Task: Add `config` tree to `SledDb` constants.
-- [ ] Task: TDD - Write integration tests for `SledDb` with encryption (using a mock key).
-- [ ] Task: Update `SledDb` struct to include a thread-safe storage for the `master_key: OnceCell<[u8; 32]>`.
-- [ ] Task: Implement `SledDb::initialize_encryption(&self, password: &str)` for new databases (generate salt, derive key, save salt).
-- [ ] Task: Implement `SledDb::unlock(&self, password: &str)` for existing databases (load salt, derive key, verify with canary).
-- [ ] Task: Refactor `SledDb` methods to encrypt/decrypt data:
-    - [ ] Task: `add_fragment` and `list_fragments`.
-    - [ ] Task: `mark_as_tried` and `is_tried` (note: keys in `tried_combinations` tree must also be hashed or encrypted).
-    - [ ] Task: `save_checkpoint` and `load_checkpoint`.
+- [x] Task: Add `config` tree to `SledDb` constants. 01ef321
+- [x] Task: TDD - Write integration tests for `SledDb` with encryption (using a mock key).
+- [x] Task: Update `SledDb` struct to include a thread-safe storage for the `master_key: OnceCell<[u8; 32]>`.
+- [x] Task: Implement `SledDb::initialize_encryption(&self, password: &str)` for new databases (generate salt, derive key, save salt).
+- [x] Task: Implement `SledDb::unlock(&self, password: &str)` for existing databases (load salt, derive key, verify with canary).
+- [x] Task: Refactor `SledDb` methods to encrypt/decrypt data:
+    - [x] Task: `add_fragment` and `list_fragments`.
+    - [x] Task: `mark_as_tried` and `is_tried` (note: keys in `tried_combinations` tree must also be hashed or encrypted).
+    - [x] Task: `save_checkpoint` and `load_checkpoint`.
 - [ ] Task: Conductor - User Manual Verification 'Phase 2' (Protocol in workflow.md)
 
 ## Phase 3: CLI Integration & UX
