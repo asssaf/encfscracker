@@ -3,6 +3,7 @@ use std::path::PathBuf;
 use encfs_cracker::config::CrackerConfig;
 use encfs_cracker::crypto::encfs_config::EncfSConfig;
 use encfs_cracker::orchestration::parallel::ParallelCracker;
+use encfs_cracker::cli_utils::PasswordPrompt;
 
 #[derive(Parser, Debug)]
 #[command(author, version, about, long_about = None)]
@@ -41,6 +42,22 @@ fn main() -> anyhow::Result<()> {
     // Initialize state database
     let db_path = args.db_path.clone();
     let db = encfs_cracker::state::sled_db::SledDb::open(&db_path)?;
+
+    // Handle encryption initialization or unlocking
+    let prompt = encfs_cracker::cli_utils::RPasswordPrompt;
+    if db.needs_initialization()? {
+        println!("New state database detected. Please set a master password for encryption at rest.");
+        let pass1 = prompt.prompt("Enter new master password: ")?;
+        let pass2 = prompt.prompt("Confirm master password: ")?;
+        if pass1 != pass2 {
+            return Err(anyhow::anyhow!("Passwords do not match."));
+        }
+        db.initialize_encryption(&pass1)?;
+        println!("Encryption initialized successfully.");
+    } else {
+        let password = prompt.prompt("Enter master password to unlock state: ")?;
+        db.unlock(&password)?;
+    }
     
     if args.reset_state {
         db.reset_state()?;
