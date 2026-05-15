@@ -38,3 +38,56 @@ fn test_end_to_end_cracker() {
     }
     assert!(output.status.success(), "Cracker should run successfully");
 }
+
+#[test]
+fn test_end_to_end_cracker_with_groups() {
+    let dir = tempdir().unwrap();
+    let config_path = dir.path().join("config.xml");
+    let config_content = r#"<boost_serialization>
+    <cfg>
+        <saltData>SGVsbG8=</saltData>
+        <kdfIterations>1000</kdfIterations>
+        <keySize>32</keySize>
+        <encodedKeyData>S2V5RGF0YQ==</encodedKeyData>
+    </cfg>
+</boost_serialization>"#;
+    fs::write(&config_path, config_content).unwrap();
+    
+    let db_path = dir.path().join("group_cracker.db");
+    
+    // 1. Add fragments with groups
+    Command::new("cargo")
+        .arg("run")
+        .arg("--")
+        .arg("--db-path")
+        .arg(&db_path)
+        .arg("--add-fragment")
+        .arg("word1")
+        .arg("--group")
+        .arg("G1")
+        .output().unwrap();
+        
+    Command::new("cargo")
+        .arg("run")
+        .arg("--")
+        .arg("--db-path")
+        .arg(&db_path)
+        .arg("--add-fragment")
+        .arg("word2")
+        .arg("--group")
+        .arg("G1")
+        .output().unwrap();
+
+    // 2. Run cracker
+    let output = Command::new("cargo")
+        .arg("run")
+        .arg("--")
+        .arg("--config")
+        .arg(config_path)
+        .arg("--db-path")
+        .arg(db_path)
+        .output()
+        .expect("Failed to execute command");
+
+    assert!(output.status.success(), "Cracker with groups should run successfully");
+}
