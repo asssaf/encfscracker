@@ -7,6 +7,7 @@ fn test_cli_add_fragment() {
     let dir = tempdir().unwrap();
     let config_path = dir.path().join("config.xml");
     fs::write(&config_path, "<dummy></dummy>").unwrap();
+    let db_path = dir.path().join("test_add.db");
 
     let output = Command::new("cargo")
         .env("STATE_PASSWORD", "testpass")
@@ -14,6 +15,8 @@ fn test_cli_add_fragment() {
         .arg("--")
         .arg("--config")
         .arg(config_path)
+        .arg("--db-path")
+        .arg(db_path)
         .arg("--add-fragment")
         .arg("secret")
         .arg("--group")

@@ -9,8 +9,9 @@ use rand::{RngExt, rng};
 /// Derives a 32-byte key from a password and salt using Argon2id.
 pub fn derive_key(password: &str, salt: &[u8]) -> [u8; 32] {
     // Adjust parameters for a balance between security and performance
-    // m_cost: 64MB, t_cost: 3, p_cost: 4
-    let params = Params::new(65536, 3, 4, Some(32))
+    // Target: < 500ms startup latency.
+    // m_cost: 16MB, t_cost: 1, p_cost: 1
+    let params = Params::new(16384, 1, 1, Some(32))
         .expect("Argon2 parameters should be valid");
 
     let argon2 = Argon2::new(
