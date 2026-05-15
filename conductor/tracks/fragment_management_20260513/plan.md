@@ -22,7 +22,7 @@ This plan outlines the steps to implement a group-aware fragment management syst
 - [x] Task: Write unit tests verifying that combinations respect group boundaries. b912514
 - [x] Task: Conductor - User Manual Verification 'Phase 3: Group-Aware Combination Engine' (Protocol in workflow.md)
 
-## Phase 4: Integration and Benchmarking
+## Phase 4: Integration and Benchmarking [checkpoint: 77c74b0]
 - [x] Task: Perform an end-to-end test with a real EncfS config and grouped fragments. c27d44f
 - [x] Task: Benchmark the performance impact of the group-filtering logic. c27d44f
-- [~] Task: Conductor - User Manual Verification 'Phase 4: Integration and Benchmarking' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 4: Integration and Benchmarking' (Protocol in workflow.md)
