@@ -8,11 +8,6 @@ fn test_fragment_creation_and_persistence() {
     let db_path = dir.path().join("fragment_test_db");
     let db = SledDb::open(&db_path).expect("Failed to open DB");
     
-    let group_a = FragmentGroup {
-        id: "A".to_string(),
-        name: Some("Group A".to_string()),
-    };
-    
     let fragment = Fragment {
         text: "secret".to_string(),
         group_id: Some("A".to_string()),

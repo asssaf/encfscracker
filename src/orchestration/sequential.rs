@@ -1,7 +1,6 @@
 use crate::config::CrackerConfig;
 use crate::fragment_combination::generate_combinations;
 use crate::state::sled_db::SledDb;
-use crate::state::Fragment;
 use std::sync::Arc;
 use std::sync::atomic::{AtomicBool, Ordering};
 
