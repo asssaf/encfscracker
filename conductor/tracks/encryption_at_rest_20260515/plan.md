@@ -11,7 +11,7 @@ Implement authenticated encryption (AES-256-GCM) for the persistent state databa
 ## Phase 1: Cryptographic Infrastructure & KDF
 **Goal:** Implement the core cryptographic logic for key derivation and data encryption.
 
-- [ ] Task: Add dependencies to `Cargo.toml` (`argon2`, `rand`, `rpassword`).
+- [x] Task: Add dependencies to `Cargo.toml` (`argon2`, `rand`, `rpassword`). 47fad33
 - [ ] Task: Implement `CryptoManager` module in `src/crypto/mod.rs` (or `src/crypto/state_encryption.rs`).
     - [ ] Task: TDD - Write tests for Argon2id key derivation.
     - [ ] Task: Implement `derive_key(password: &str, salt: &[u8]) -> [u8; 32]`.
