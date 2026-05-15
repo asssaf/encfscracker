@@ -9,6 +9,7 @@ use anyhow::{anyhow, Result};
 
 // Declare the encfs_config module as public and re-export EncfSConfig publicly
 pub mod encfs_config; // Make the module public
+pub mod state_encryption;
 pub use encfs_config::EncfSConfig; // Publicly re-export EncfSConfig
 
 // Make HmacSha1 public
