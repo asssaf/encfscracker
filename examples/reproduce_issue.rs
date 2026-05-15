@@ -11,7 +11,7 @@ type Aes256CfbDec = Decryptor<Aes256>;
 
 fn derive_key(password: &str, salt: &[u8], iterations: u32) -> Vec<u8> {
     let mut derived_key = vec![0u8; 32 + 16];
-    pbkdf2::<HmacSha1>(password.as_bytes(), salt, iterations, &mut derived_key);
+    let _ = pbkdf2::<HmacSha1>(password.as_bytes(), salt, iterations, &mut derived_key);
     derived_key
 }
 

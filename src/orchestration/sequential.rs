@@ -56,6 +56,7 @@ impl SequentialCracker {
 mod tests {
     use super::*;
     use crate::crypto::encfs_config::EncfSConfig;
+    use crate::state::Fragment;
     use ::tempfile::tempdir;
 
     #[test]
