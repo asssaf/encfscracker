@@ -36,11 +36,11 @@ Implement authenticated encryption (AES-256-GCM) for the persistent state databa
 ## Phase 3: CLI Integration & UX
 **Goal:** Implement the user-facing password prompt and secure initialization flow.
 
-- [ ] Task: TDD - Write tests for the password prompt logic (mocking stdin).
-- [ ] Task: Implement a secure password prompt using `rpassword` in `src/main.rs`.
-- [ ] Task: Update the "setup" flow: if no DB exists, prompt for a new master password.
-- [ ] Task: Update the startup flow: if a DB exists, prompt for the master password before any operations.
-- [ ] Task: Add clear error handling for incorrect passwords.
+- [x] Task: TDD - Write tests for the password prompt logic (mocking stdin). 5ba1f1f
+- [x] Task: Implement a secure password prompt using `rpassword` in `src/main.rs`.
+- [x] Task: Update the "setup" flow: if no DB exists, prompt for a new master password.
+- [x] Task: Update the startup flow: if a DB exists, prompt for the master password before any operations.
+- [x] Task: Add clear error handling for incorrect passwords.
 - [ ] Task: Conductor - User Manual Verification 'Phase 3' (Protocol in workflow.md)
 
 ## Phase 4: Final Verification & Documentation
