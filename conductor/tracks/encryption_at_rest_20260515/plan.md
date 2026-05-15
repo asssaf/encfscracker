@@ -33,7 +33,7 @@ Implement authenticated encryption (AES-256-GCM) for the persistent state databa
     - [x] Task: `save_checkpoint` and `load_checkpoint`.
 - [ ] Task: Conductor - User Manual Verification 'Phase 2' (Protocol in workflow.md)
 
-## Phase 3: CLI Integration & UX
+## Phase 3: CLI Integration & UX [checkpoint: 8014066]
 **Goal:** Implement the user-facing password prompt and secure initialization flow.
 
 - [x] Task: TDD - Write tests for the password prompt logic (mocking stdin). 5ba1f1f
