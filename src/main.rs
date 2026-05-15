@@ -99,11 +99,12 @@ fn main() -> anyhow::Result<()> {
     let encfs_config = EncfSConfig::from_xml(&xml)?;
     
     // Merge command line fragments with DB fragments
-    let mut fragments = args.fragments;
+    let mut fragments: Vec<encfs_cracker::state::Fragment> = args.fragments
+        .into_iter()
+        .map(|text| encfs_cracker::state::Fragment { text, group_id: None })
+        .collect();
     let db_fragments = db.list_fragments()?;
-    for f in db_fragments {
-        fragments.push(f.text);
-    }
+    fragments.extend(db_fragments);
     drop(db);
     
     let config = CrackerConfig {
