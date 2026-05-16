@@ -1,7 +1,7 @@
-use serde::Deserialize;
-use quick_xml::de::from_str;
-use std::path::PathBuf;
 use crate::crypto::encfs_config::EncfSConfig;
+use quick_xml::de::from_str;
+use serde::Deserialize;
+use std::path::PathBuf;
 
 #[derive(Debug, Deserialize, PartialEq)]
 pub struct EncfsConfig {

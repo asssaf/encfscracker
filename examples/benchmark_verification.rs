@@ -12,13 +12,16 @@ fn main() {
 </boost_serialization>"#;
     let config = EncfSConfig::from_xml(xml).unwrap();
     let password = "password";
-    
+
     let iterations = 10000;
     let start = Instant::now();
     for _ in 0..iterations {
         config.verify_password(password);
     }
     let duration = start.elapsed();
-    println!("Time taken for {} verifications: {:?}", iterations, duration);
+    println!(
+        "Time taken for {} verifications: {:?}",
+        iterations, duration
+    );
     println!("Average time per verification: {:?}", duration / iterations);
 }

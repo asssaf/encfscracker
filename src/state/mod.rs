@@ -28,7 +28,7 @@ pub fn log_tried_combination(combination: &[String], state_file: &Path) -> anyho
         .create(true)
         .append(true)
         .open(state_file)?;
-    
+
     let line = combination.join(",") + "\n";
     file.write_all(line.as_bytes())?;
     Ok(())

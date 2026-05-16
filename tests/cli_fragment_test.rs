@@ -1,6 +1,6 @@
+use std::fs;
 use std::process::Command;
 use tempfile::tempdir;
-use std::fs;
 
 #[test]
 fn test_cli_add_fragment() {
@@ -25,14 +25,17 @@ fn test_cli_add_fragment() {
         .expect("Failed to execute command");
 
     // This should fail because --add-fragment is not recognized
-    assert!(output.status.success(), "CLI should recognize --add-fragment and --group");
+    assert!(
+        output.status.success(),
+        "CLI should recognize --add-fragment and --group"
+    );
 }
 
 #[test]
 fn test_cli_management_flow() {
     let dir = tempdir().unwrap();
     let db_path = dir.path().join("management.db");
-    
+
     // 1. Add fragment
     let output = Command::new("cargo")
         .env("STATE_PASSWORD", "testpass")
