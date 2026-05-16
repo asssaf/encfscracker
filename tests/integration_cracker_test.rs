@@ -1,6 +1,6 @@
+use std::fs;
 use std::process::Command;
 use tempfile::tempdir;
-use std::fs;
 
 #[test]
 fn test_end_to_end_cracker() {
@@ -15,9 +15,9 @@ fn test_end_to_end_cracker() {
     </cfg>
 </boost_serialization>"#;
     fs::write(&config_path, config_content).unwrap();
-    
+
     let db_path = dir.path().join("cracker_state.db");
-    
+
     // We don't have a real encfs password to crack, so just run the tool
     // and verify it completes without crashing.
     let output = Command::new("cargo")
@@ -53,9 +53,9 @@ fn test_end_to_end_cracker_with_groups() {
     </cfg>
 </boost_serialization>"#;
     fs::write(&config_path, config_content).unwrap();
-    
+
     let db_path = dir.path().join("group_cracker.db");
-    
+
     // 1. Add fragments with groups
     Command::new("cargo")
         .env("STATE_PASSWORD", "testpass")
@@ -67,8 +67,9 @@ fn test_end_to_end_cracker_with_groups() {
         .arg("word1")
         .arg("--group")
         .arg("G1")
-        .output().unwrap();
-        
+        .output()
+        .unwrap();
+
     Command::new("cargo")
         .env("STATE_PASSWORD", "testpass")
         .arg("run")
@@ -79,7 +80,8 @@ fn test_end_to_end_cracker_with_groups() {
         .arg("word2")
         .arg("--group")
         .arg("G1")
-        .output().unwrap();
+        .output()
+        .unwrap();
 
     // 2. Run cracker
     let output = Command::new("cargo")
@@ -93,5 +95,8 @@ fn test_end_to_end_cracker_with_groups() {
         .output()
         .expect("Failed to execute command");
 
-    assert!(output.status.success(), "Cracker with groups should run successfully");
+    assert!(
+        output.status.success(),
+        "Cracker with groups should run successfully"
+    );
 }

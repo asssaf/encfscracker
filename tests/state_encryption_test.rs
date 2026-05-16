@@ -8,7 +8,7 @@ mod tests {
         let salt = b"static_salt_for_test";
         let key1 = state_encryption::derive_key(password, salt);
         let key2 = state_encryption::derive_key(password, salt);
-        
+
         assert_eq!(key1.len(), 32);
         assert_eq!(key1, key2);
 
@@ -21,11 +21,12 @@ mod tests {
     fn test_encrypt_decrypt() {
         let key = [0u8; 32];
         let data = b"sensitive fragment data";
-        
+
         let encrypted = state_encryption::encrypt(data, &key);
         assert_ne!(data.to_vec(), encrypted);
-        
-        let decrypted = state_encryption::decrypt(&encrypted, &key).expect("Decryption should succeed");
+
+        let decrypted =
+            state_encryption::decrypt(&encrypted, &key).expect("Decryption should succeed");
         assert_eq!(data.to_vec(), decrypted);
     }
 
@@ -34,10 +35,10 @@ mod tests {
         let key = [0u8; 32];
         let wrong_key = [1u8; 32];
         let data = b"sensitive data";
-        
+
         let encrypted = state_encryption::encrypt(data, &key);
         let result = state_encryption::decrypt(&encrypted, &wrong_key);
-        
+
         assert!(result.is_err());
     }
 }
