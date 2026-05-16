@@ -6,7 +6,11 @@ RUN apt-get update && apt-get install -y \
     rust-clippy \
     rustfmt \
     build-essential \
+    llvm \
     && rm -rf /var/lib/apt/lists/*
+
+# Install cargo-llvm-cov
+RUN cargo install cargo-llvm-cov --version 0.6.21 --locked
 
 WORKDIR /app
 COPY . .
@@ -17,8 +21,8 @@ RUN cargo fmt --all -- --check
 # Run lints
 RUN cargo clippy --all-targets --all-features -- -D warnings
 
-# Run tests
-RUN cargo test --all-targets --all-features
+# Run tests and coverage
+RUN cargo llvm-cov --all-targets --all-features --fail-under-lines 75 --html --output-dir coverage-report
 
 # Build binaries
 RUN cargo build
@@ -27,3 +31,4 @@ RUN cargo build --release
 FROM scratch AS export
 COPY --from=builder /app/target/debug/encfs_cracker /debug/
 COPY --from=builder /app/target/release/encfs_cracker /release/
+COPY --from=builder /app/coverage-report/ /coverage/
