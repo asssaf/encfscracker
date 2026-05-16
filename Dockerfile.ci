@@ -10,7 +10,7 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Install cargo-llvm-cov
-RUN cargo install cargo-llvm-cov --locked
+RUN cargo install cargo-llvm-cov --version 0.6.21 --locked
 
 WORKDIR /app
 COPY . .
