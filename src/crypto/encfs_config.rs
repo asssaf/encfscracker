@@ -1,7 +1,7 @@
+use crate::crypto::derive_key;
+use base64::{engine::general_purpose, Engine as _};
 use quick_xml::de::from_str;
 use serde::Deserialize;
-use base64::{engine::general_purpose, Engine as _};
-use crate::crypto::derive_key;
 
 #[derive(Debug, Deserialize)]
 #[serde(rename = "boost_serialization")]
@@ -45,7 +45,10 @@ impl EncfSConfig {
         if let Some(bytes) = self.key_data_cache.get() {
             return Ok(bytes.as_slice());
         }
-        let cleaned = self.cfg.encoded_key_data.replace(|c: char| c.is_whitespace(), "");
+        let cleaned = self
+            .cfg
+            .encoded_key_data
+            .replace(|c: char| c.is_whitespace(), "");
         let decoded = general_purpose::STANDARD.decode(&cleaned)?;
         let _ = self.key_data_cache.set(decoded);
         Ok(self.key_data_cache.get().unwrap().as_slice())
@@ -57,16 +60,16 @@ impl EncfSConfig {
             Err(e) => {
                 eprintln!("Salt decode error: {}", e);
                 return false;
-            },
+            }
         };
         let encoded_key_data = match self.encoded_key_data_bytes() {
             Ok(d) => d,
             Err(e) => {
                 eprintln!("Key data decode error: {}", e);
                 return false;
-            },
+            }
         };
-        
+
         // Extract checksum from first 4 bytes
         if encoded_key_data.len() < 4 {
             return false;
@@ -78,11 +81,13 @@ impl EncfSConfig {
         let kek = derive_key(password.as_bytes(), salt, self.cfg.iterations);
         let master_key = &kek[0..32];
         let master_iv = &kek[32..48];
-        
-        if let Ok(decrypted_key) = crate::crypto::decrypt_encoded_key_data(&encoded_key_data, master_key, master_iv) {
+
+        if let Ok(decrypted_key) =
+            crate::crypto::decrypt_encoded_key_data(encoded_key_data, master_key, master_iv)
+        {
             return crate::crypto::validate_decrypted_key(&decrypted_key, master_key, checksum);
         }
-        
+
         false
     }
 }

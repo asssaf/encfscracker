@@ -1,8 +1,8 @@
 use crate::config::CrackerConfig;
 use crate::fragment_combination::generate_combinations;
 use crate::state::sled_db::SledDb;
-use std::sync::Arc;
 use std::sync::atomic::{AtomicBool, Ordering};
+use std::sync::Arc;
 
 pub struct SequentialCracker {
     config: CrackerConfig,
@@ -14,7 +14,7 @@ impl SequentialCracker {
     pub fn new(config: CrackerConfig) -> anyhow::Result<Self> {
         let db = SledDb::open(&config.db_path)?;
         let is_running = Arc::new(AtomicBool::new(true));
-        
+
         #[cfg(not(test))]
         {
             let r = is_running.clone();
@@ -23,7 +23,11 @@ impl SequentialCracker {
             })?;
         }
 
-        Ok(Self { config, db, is_running })
+        Ok(Self {
+            config,
+            db,
+            is_running,
+        })
     }
 
     pub fn run(&self) -> anyhow::Result<Option<String>> {
@@ -63,7 +67,7 @@ mod tests {
     fn test_sequential_cracker_finds_password() {
         let dir = tempdir().unwrap();
         let db_path = dir.path().join("test.db");
-        
+
         let xml = r#"<boost_serialization>
     <cfg>
         <saltData>SGVsbG8=</saltData>
@@ -76,8 +80,14 @@ mod tests {
         let encfs_config = EncfSConfig::from_xml(xml).unwrap();
         let config = CrackerConfig {
             fragments: vec![
-                Fragment { text: "a".to_string(), group_id: None },
-                Fragment { text: "b".to_string(), group_id: None }
+                Fragment {
+                    text: "a".to_string(),
+                    group_id: None,
+                },
+                Fragment {
+                    text: "b".to_string(),
+                    group_id: None,
+                },
             ],
             encfs_config,
             db_path,

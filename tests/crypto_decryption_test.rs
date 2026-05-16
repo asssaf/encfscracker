@@ -12,10 +12,10 @@ const EXPECTED_DECRYPTED_LEN: usize = 48;
 fn test_decrypt_encoded_key_data_structure() {
     // Construct dummy encoded_data: 4 bytes checksum + 48 bytes encrypted data.
     let mut encoded_data = vec![0u8; 52]; // 4 bytes for checksum + 48 bytes for encrypted data
-    
+
     // Simulate a checksum (4 bytes).
-    encoded_data[0..4].copy_from_slice(&[0x12, 0x34, 0x56, 0x78]); 
-    
+    encoded_data[0..4].copy_from_slice(&[0x12, 0x34, 0x56, 0x78]);
+
     // Simulate encrypted data (48 bytes).
     encoded_data[4..52].copy_from_slice(&[1u8; 48]);
 
@@ -24,12 +24,14 @@ fn test_decrypt_encoded_key_data_structure() {
     let master_iv = &kek[32..48];
 
     // Call the function with mock parameters and dummy encoded_data.
-    let decrypted_data = decrypt_encoded_key_data(
-        encoded_data.as_slice(),
-        master_key,
-        master_iv
-    ).unwrap();
+    let decrypted_data =
+        decrypt_encoded_key_data(encoded_data.as_slice(), master_key, master_iv).unwrap();
 
     // Assert that the decrypted data has the expected length.
-    assert_eq!(decrypted_data.len(), EXPECTED_DECRYPTED_LEN, "Decrypted data should be {} bytes", EXPECTED_DECRYPTED_LEN);
+    assert_eq!(
+        decrypted_data.len(),
+        EXPECTED_DECRYPTED_LEN,
+        "Decrypted data should be {} bytes",
+        EXPECTED_DECRYPTED_LEN
+    );
 }

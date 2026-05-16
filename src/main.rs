@@ -1,9 +1,9 @@
 use clap::Parser;
-use std::path::PathBuf;
+use encfs_cracker::cli_utils::PasswordPrompt;
 use encfs_cracker::config::CrackerConfig;
 use encfs_cracker::crypto::encfs_config::EncfSConfig;
 use encfs_cracker::orchestration::parallel::ParallelCracker;
-use encfs_cracker::cli_utils::PasswordPrompt;
+use std::path::PathBuf;
 
 #[derive(Parser, Debug)]
 #[command(author, version, about, long_about = None)]
@@ -41,18 +41,20 @@ struct Args {
 
 fn main() -> anyhow::Result<()> {
     let args = Args::parse();
-    
+
     // Initialize state database
     let db_path = args.db_path.clone();
     let db = encfs_cracker::state::sled_db::SledDb::open(&db_path)?;
 
     // Handle encryption initialization or unlocking
     let prompt = encfs_cracker::cli_utils::RPasswordPrompt;
-    
+
     let password = if let Some(p) = args.password {
         p
     } else if db.needs_initialization()? {
-        println!("New state database detected. Please set a master password for encryption at rest.");
+        println!(
+            "New state database detected. Please set a master password for encryption at rest."
+        );
         let pass1 = prompt.prompt("Enter new master password: ")?;
         let pass2 = prompt.prompt("Confirm master password: ")?;
         if pass1 != pass2 {
@@ -69,7 +71,7 @@ fn main() -> anyhow::Result<()> {
     } else {
         db.unlock(&password)?;
     }
-    
+
     if args.reset_state {
         db.reset_state()?;
         println!("State reset successfully.");
@@ -122,25 +124,31 @@ fn main() -> anyhow::Result<()> {
     }
 
     // Default behavior: Crack
-    let config_path = args.config.ok_or_else(|| anyhow::anyhow!("Config file is required for cracking"))?;
+    let config_path = args
+        .config
+        .ok_or_else(|| anyhow::anyhow!("Config file is required for cracking"))?;
     let xml = std::fs::read_to_string(config_path)?;
     let encfs_config = EncfSConfig::from_xml(&xml)?;
-    
+
     // Merge command line fragments with DB fragments
-    let mut fragments: Vec<encfs_cracker::state::Fragment> = args.fragments
+    let mut fragments: Vec<encfs_cracker::state::Fragment> = args
+        .fragments
         .into_iter()
-        .map(|text| encfs_cracker::state::Fragment { text, group_id: None })
+        .map(|text| encfs_cracker::state::Fragment {
+            text,
+            group_id: None,
+        })
         .collect();
     let db_fragments = db.list_fragments()?;
     fragments.extend(db_fragments);
     drop(db);
-    
+
     let config = CrackerConfig {
         fragments,
         encfs_config,
         db_path,
     };
-    
+
     let cracker = ParallelCracker::new(config)?;
     if let Some(password) = cracker.run()? {
         println!("Password found: {}", password);

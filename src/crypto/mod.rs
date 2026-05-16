@@ -1,10 +1,10 @@
-use hmac::{Hmac, Mac};
-use sha1::Sha1;
-use pbkdf2::pbkdf2;
 use aes::Aes256;
 use cfb_mode::Decryptor;
+use hmac::{Hmac, Mac};
+use pbkdf2::pbkdf2;
+use sha1::Sha1;
 // Import AsyncStreamCipher for decrypt method
-use aes::cipher::{KeyIvInit, AsyncStreamCipher}; 
+use aes::cipher::{AsyncStreamCipher, KeyIvInit};
 use anyhow::{anyhow, Result};
 
 // Declare the encfs_config module as public and re-export EncfSConfig publicly
@@ -18,7 +18,7 @@ type Aes256CfbDec = Decryptor<Aes256>;
 
 pub fn derive_key(password: &[u8], salt: &[u8], iterations: u32) -> Vec<u8> {
     let mut derived_key = vec![0u8; 32 + 16]; // Key (32) + IV (16)
-    // Handle the Result returned by pbkdf2
+                                              // Handle the Result returned by pbkdf2
     let _ = pbkdf2::<HmacSha1>(password, salt, iterations, &mut derived_key);
     derived_key
 }
@@ -27,8 +27,8 @@ pub fn set_ivec(master_key: &[u8], master_iv: &[u8], seed: u64) -> [u8; 16] {
     let mut mac = HmacSha1::new_from_slice(master_key).unwrap();
     mac.update(master_iv);
     let mut seed_bytes = [0u8; 8];
-    for i in 0..8 {
-        seed_bytes[i] = (seed >> (i * 8)) as u8;
+    for (i, byte) in seed_bytes.iter_mut().enumerate() {
+        *byte = (seed >> (i * 8)) as u8;
     }
     mac.update(&seed_bytes);
     let result = mac.finalize().into_bytes();
@@ -53,7 +53,11 @@ pub fn flip_bytes(buf: &mut [u8]) {
     buf.reverse();
 }
 
-pub fn decrypt_encoded_key_data(encoded_data: &[u8], master_key: &[u8], master_iv: &[u8]) -> Result<Vec<u8>> {
+pub fn decrypt_encoded_key_data(
+    encoded_data: &[u8],
+    master_key: &[u8],
+    master_iv: &[u8],
+) -> Result<Vec<u8>> {
     if encoded_data.len() < 52 {
         return Err(anyhow!("Encoded data too short"));
     }
@@ -80,11 +84,15 @@ pub fn decrypt_encoded_key_data(encoded_data: &[u8], master_key: &[u8], master_i
     Ok(buf)
 }
 
-pub fn validate_decrypted_key(decrypted_data: &[u8], master_key: &[u8], expected_checksum: u32) -> bool {
+pub fn validate_decrypted_key(
+    decrypted_data: &[u8],
+    master_key: &[u8],
+    expected_checksum: u32,
+) -> bool {
     let mut mac = HmacSha1::new_from_slice(master_key).unwrap();
     mac.update(decrypted_data);
     let result = mac.finalize().into_bytes();
-    
+
     let mut h = [0u8; 8];
     // The loop in validate_decrypted_key goes from 0 to 18 (inclusive).
     // It accesses result[i] where i is up to 18. HMAC-SHA1 produces 20 bytes.
@@ -98,6 +106,6 @@ pub fn validate_decrypted_key(decrypted_data: &[u8], master_key: &[u8], expected
         mac64 = (mac64 << 8) | (byte as u64);
     }
     let mac32 = ((mac64 >> 32) as u32) ^ (mac64 as u32);
-    
+
     mac32 == expected_checksum
 }

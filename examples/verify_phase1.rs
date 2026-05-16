@@ -1,5 +1,5 @@
-use encfs_cracker::crypto::encfs_config::EncfSConfig;
 use encfs_cracker::config::CrackerConfig;
+use encfs_cracker::crypto::encfs_config::EncfSConfig;
 use encfs_cracker::state::Fragment;
 use std::path::PathBuf;
 
@@ -13,8 +13,14 @@ fn main() -> anyhow::Result<()> {
     let encfs_cfg = EncfSConfig::from_xml(xml)?;
     let cracker_cfg = CrackerConfig {
         fragments: vec![
-            Fragment { text: "a".to_string(), group_id: None },
-            Fragment { text: "b".to_string(), group_id: None },
+            Fragment {
+                text: "a".to_string(),
+                group_id: None,
+            },
+            Fragment {
+                text: "b".to_string(),
+                group_id: None,
+            },
         ],
         encfs_config: encfs_cfg,
         db_path: PathBuf::from("state.db"),

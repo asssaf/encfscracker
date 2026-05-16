@@ -16,4 +16,6 @@ To find the latest commit hash for an action, go to the releases page in the act
 - You are running in a container that doesn't keep installed tools across sessions. Therefore you need to install tools (using sudo apt install) before calling them. Don't ever assume a tool is installed unless you installed it in this session.
 - The primary branch for this repository is `master`.
 - When making changes to the codebase, ensure that `README.md` and the technical specifications in the `specs/` directory are updated if the changes are relevant to documented features.
-- Before submitting any changes, you must run the appropriate lint and format tools locally to ensure the code complies with the project's standards and doesn't fail in the CI workflow
+- Before submitting any changes, you must run the following lint and format tools locally to ensure the code complies with the project's standards and doesn't fail in the CI workflow:
+    - Formatting: `cargo fmt --all`
+    - Linting: `cargo clippy --all-targets --all-features -- -D warnings`

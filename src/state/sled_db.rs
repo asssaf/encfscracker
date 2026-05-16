@@ -1,6 +1,6 @@
-use std::path::Path;
-use sled::{Db, Tree};
 use once_cell::sync::OnceCell;
+use sled::{Db, Tree};
+use std::path::Path;
 
 static INSTANCE: OnceCell<SledDb> = OnceCell::new();
 
@@ -65,21 +65,23 @@ impl SledDb {
     /// Initializes a new database with encryption.
     pub fn initialize_encryption(&self, password: &str) -> anyhow::Result<()> {
         use crate::crypto::state_encryption;
-        use rand::{RngExt, rng};
+        use rand::{rng, RngExt};
 
         let mut salt = [0u8; 16];
         rng().fill(&mut salt);
 
         let key = state_encryption::derive_key(password, &salt);
-        
+
         let config = self.config_tree()?;
         config.insert(KEY_SALT, &salt)?;
-        
+
         // Save an encrypted canary to verify the password later
         let encrypted_canary = state_encryption::encrypt(CANARY_VALUE, &key);
         config.insert(KEY_CANARY, encrypted_canary)?;
 
-        self.master_key.set(key).map_err(|_| anyhow::anyhow!("Master key already set"))?;
+        self.master_key
+            .set(key)
+            .map_err(|_| anyhow::anyhow!("Master key already set"))?;
         Ok(())
     }
 
@@ -88,24 +90,29 @@ impl SledDb {
         use crate::crypto::state_encryption;
 
         let config = self.config_tree()?;
-        let salt = config.get(KEY_SALT)?
+        let salt = config
+            .get(KEY_SALT)?
             .ok_or_else(|| anyhow::anyhow!("Database not initialized (salt missing)"))?;
-        
+
         let key = state_encryption::derive_key(password, &salt);
-        
-        let encrypted_canary = config.get(KEY_CANARY)?
+
+        let encrypted_canary = config
+            .get(KEY_CANARY)?
             .ok_or_else(|| anyhow::anyhow!("Database corrupted (canary missing)"))?;
-        
+
         // Attempt to decrypt canary to verify password
         state_encryption::decrypt(&encrypted_canary, &key)
             .map_err(|_| anyhow::anyhow!("Incorrect password"))?;
 
-        self.master_key.set(key).map_err(|_| anyhow::anyhow!("Master key already set"))?;
+        self.master_key
+            .set(key)
+            .map_err(|_| anyhow::anyhow!("Master key already set"))?;
         Ok(())
     }
 
     fn get_key(&self) -> anyhow::Result<&[u8; 32]> {
-        self.master_key.get()
+        self.master_key
+            .get()
             .ok_or_else(|| anyhow::anyhow!("Database is locked. Please unlock first."))
     }
 
@@ -168,7 +175,7 @@ impl SledDb {
     }
 
     pub fn mark_as_tried(&self, combination: &[&str]) -> anyhow::Result<()> {
-        use sha2::{Sha256, Digest};
+        use sha2::{Digest, Sha256};
         let tree = self.tried_tree()?;
         let raw_key = combination.join("\0");
         let mut hasher = Sha256::new();
@@ -179,7 +186,7 @@ impl SledDb {
     }
 
     pub fn is_tried(&self, combination: &[&str]) -> anyhow::Result<bool> {
-        use sha2::{Sha256, Digest};
+        use sha2::{Digest, Sha256};
         let tree = self.tried_tree()?;
         let raw_key = combination.join("\0");
         let mut hasher = Sha256::new();
@@ -206,7 +213,7 @@ impl SledDb {
             Some(ivec) => {
                 let decrypted = state_encryption::decrypt(&ivec, key)?;
                 Ok(Some(String::from_utf8(decrypted)?))
-            },
+            }
             None => Ok(None),
         }
     }
