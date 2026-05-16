@@ -69,7 +69,8 @@ impl ParallelCracker {
                     }
 
                     let current = total_attempts_inner.fetch_add(1, Ordering::SeqCst);
-                    if current > 0 && current.is_multiple_of(10000) {
+                    #[allow(clippy::manual_is_multiple_of)]
+                    if current > 0 && current % 10000 == 0 {
                         let elapsed = start_time.elapsed().as_secs_f64();
                         let speed = current as f64 / elapsed;
                         println!(
