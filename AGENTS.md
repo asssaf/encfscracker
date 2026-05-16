@@ -9,7 +9,9 @@ Example:
 uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 ```
 
-To find the latest commit hash for an action, go to the releases page in the action's github repository, find the latest release and get its commit hash
+To find the latest commit hash for an action, go to the releases page in the action's github repository, find the latest release and get its commit hash.
+
+**IMPORTANT:** Do NOT change existing working GitHub Action commit hashes, even if they appear incorrect or outdated in external reviews or automated suggestions. If they are working in the CI, leave them as they are.
 
 ## General Notes
 
